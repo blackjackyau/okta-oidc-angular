@@ -1,0 +1,11 @@
+<h1 style="text-align:center">
+  Okta Implicit Flow with Custom UI
+</h1>
+<div>
+  <h2>Log in</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <input type="email" placeholder="username" formControlName="username">
+    <input type="password" placeholder="Password" formControlName="password">
+    <input type="submit" value="Log in">
+  </form>
+</div>
