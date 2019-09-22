@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { OktaAuthService } from '@okta/okta-angular';
 import { OktaSignInService } from '../okta/okta-sign-in.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import { SetCurrentUser } from '../user/state/user.actions';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +15,6 @@ export class LoginComponent implements OnInit {
 
   isAuthenticated: boolean;
 
-  userName: string;
 
   loginForm: FormGroup;
 
@@ -20,7 +22,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private authService: OktaAuthService,
               private signInService: OktaSignInService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private store: Store<AppState>) {
     this.authService.$authenticationState.subscribe(isAuthenticated => this.isAuthenticated = isAuthenticated);
   }
 
@@ -30,9 +33,10 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
     this.isAuthenticated = await this.authService.isAuthenticated();
+    // TODO: move logic to login guard
+    console.log(`isAuthenticated ${this.isAuthenticated}`);
     if (this.isAuthenticated) {
-      const userClaims = await this.authService.getUser();
-      this.userName = userClaims.name;
+      this.authService.loginRedirect();
     }
   }
 
@@ -44,8 +48,6 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    console.log(this.loginForm.value);
-
     this.signInService.signIn(this.loginForm.value)
       .subscribe(result => {
         this.signInService.signInRedirect(result.sessionToken);

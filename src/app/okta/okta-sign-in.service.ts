@@ -66,7 +66,7 @@ export class OktaSignInService {
     Object.keys(params).forEach((key) => {
       httpParams = httpParams.append(key, params[key]);
     });
-    window.location.href = `https://dev-875318.okta.com/oauth2/default/v1/authorize?${httpParams.toString()}`;
+    window.location.href = `${config.issuer}/v1/authorize?${httpParams.toString()}`;
   }
 
   private generateRandomId(length) {
