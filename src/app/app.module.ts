@@ -22,6 +22,7 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { LogoutComponent } from './logout/logout.component';
 
 
 const oktaConfigData = Object.assign({
@@ -35,6 +36,7 @@ const oktaConfigData = Object.assign({
   declarations: [
     AppComponent,
     LoginComponent,
+    LogoutComponent,
     HomeComponent,
   ],
   imports: [
