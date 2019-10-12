@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { OktaAuthService } from '@okta/okta-angular';
 import { AppState } from '../state/app.state';
 import { Store, select } from '@ngrx/store';
-import { SetCurrentUser } from '../user/state/user.actions';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../user/user';
@@ -18,7 +17,8 @@ export class HomeComponent implements OnInit {
   currentUser$: Observable<User>;
 
   constructor(private router: Router,
-              private store: Store<AppState>) { }
+              private store: Store<AppState>,
+              private oktaAuthService: OktaAuthService) { }
 
   ngOnInit() {
     this.currentUser$ = this.store.pipe(select(selectCurrentUser));
@@ -26,6 +26,18 @@ export class HomeComponent implements OnInit {
 
   logout() {
     this.router.navigate(['logout']);
+  }
+
+  renew() {
+    (this.oktaAuthService as any).oktaAuth.token.getWithoutPrompt({
+      responseType: 'id_token', // or array of types
+    })
+    .then(function(tokenOrTokens) {
+      console.log(tokenOrTokens);
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
   }
 
 }
