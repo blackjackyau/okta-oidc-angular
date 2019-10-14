@@ -32,10 +32,10 @@ export class HomeComponent implements OnInit {
     (this.oktaAuthService as any).oktaAuth.token.getWithoutPrompt({
       responseType: 'id_token', // or array of types
     })
-    .then(function(tokenOrTokens) {
+    .then(tokenOrTokens => {
       console.log(tokenOrTokens);
     })
-    .catch(function(err) {
+    .catch(err => {
       console.log(err);
     });
   }

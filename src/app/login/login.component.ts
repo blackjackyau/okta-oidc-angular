@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     }
     this.signInService.signIn(this.loginForm.value)
       .subscribe(result => {
-        this.signInService.signInRedirect(result.sessionToken);
+        this.signInService.signInRedirectPKCEAuthCode(result.sessionToken);
       });
   }
 

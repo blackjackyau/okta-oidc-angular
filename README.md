@@ -1,27 +1,36 @@
-# OktaOidcAngularRxjs
+# OktaOidcAngularNgRx
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.9.
+## Public client with Implicit grant
+```typescript
+  async signInRedirectImplicit(sessionToken: string) {
+    const params = {
+      responseType: ['id_token', 'token'],
+      sessionToken, // session token is required to pass during the auth service, if not it will call okta
+    };
+    await this.authService.loginRedirect(undefined, params);
+  }
+```
 
-## Development server
+## Public client with Auth Code PKCE
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+``` typescript
+  async signInRedirectPKCEAuthCode(sessionToken: string) {
+    const params = {
+      responseType: ['code'],
+      sessionToken, // session token is required to pass during the auth service, if not it will call okta
+      pkce: true
+    };
+    await this.authService.loginRedirect(undefined, params);
+  }
+```
 
-## Code scaffolding
+### On authorization URL
+- code_challenge: znenlxKPjR5jJ2_f5QqyoG6fc1Z8JoOzEHhPCw1JMbg
+- code_challenge_method: S256
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### On token URL with access token grant
+- code_verifier: 8a5aa15cf688a1613cf031356f16f72ec90f6f7c6d4
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Formula
+- S256 = SHA256
+- code_challenge = Base64(code_challenge_method(code_verifier)), where code_verifier is random generated
