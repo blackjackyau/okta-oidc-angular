@@ -20,7 +20,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm ci
-        ng deploy --repo=https://github.com/blackjackyau/blackjackyau.github.io.git --name="blackjackyau" --email=yau.yik.shiung@gmail.com
+        npm run deploy --repo=https://github.com/blackjackyau/blackjackyau.github.io.git --name="blackjackyau" --email=yau.yik.shiung@gmail.com
       env:
         CI: true
 
