@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { reducer as userReducer } from './user/state/user.reducer';
+import { reducer } from './user/state/user.reducer';
 
 import {
   OKTA_CONFIG,
@@ -48,7 +48,7 @@ const oktaConfigData = Object.assign({
     BrowserAnimationsModule,
     AppMaterialModule,
     AppRoutingModule,
-    StoreModule.forRoot({user: userReducer}),
+    StoreModule.forRoot({user: reducer}),
     StoreDevtoolsModule.instrument({
       name: 'Okta Oidc',
       maxAge: 25,

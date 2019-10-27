@@ -5,9 +5,9 @@ import { OktaAuthService } from '@okta/okta-angular';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../state/app.state';
 import { selectCurrentUser } from '../user/state';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, tap, switchMap, mergeMap } from 'rxjs/operators';
 import { iif, from } from 'rxjs';
-import { SetCurrentUser } from '../user/state/user.actions';
+import { SetCurrentUser, SetSSWS } from '../user/state/user.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -33,11 +33,16 @@ export class LoggedInGuard implements CanActivate {
             })
           ),
           from(this.authService.isAuthenticated()).pipe(
-            mergeMap(isAuthenticated => iif(() => isAuthenticated,
+            tap(_ => {
+              console.log('user not in store, retrieving user');
+            }),
+            switchMap(isAuthenticated => iif(() => isAuthenticated,
             from(this.authService.getUser()).pipe(
               map(userinfo => {
                 if (userinfo) {
+                  console.log('userinfo');
                   this.store.dispatch(new SetCurrentUser({id: userinfo.sub, userName: userinfo.email}));
+                  this.syncSSWS();
                 }
                 return !!userinfo;
               })
@@ -55,6 +60,13 @@ export class LoggedInGuard implements CanActivate {
         this.router.navigate(['login']);
       })
     );
+  }
+
+  syncSSWS() {
+    const ssws = localStorage.getItem('okta-ssws');
+    if (ssws) {
+      this.store.dispatch(new SetSSWS(ssws));
+    }
   }
 
 }

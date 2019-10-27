@@ -4,6 +4,7 @@ export default {
     issuer: 'https://dev-875318.okta.com/oauth2/default',
     redirectUri: 'http://localhost:4200/implicit/callback',
     scope: 'openid profile email',
-    responseType: 'id_token token'
+    responseType: 'id_token token',
+    registerUri: 'https://dev-875318.okta.com/signin/register'
   }
 };

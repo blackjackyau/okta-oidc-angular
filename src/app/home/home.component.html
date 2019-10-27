@@ -2,8 +2,11 @@ Home Page
 <p *ngIf="currentUser$ | async as currentUser">
   Welcome {{ currentUser.userName }}
 </p>
+<p *ngIf="ssws$ | async as ssws">
+  SSWS {{ ssws }}
+</p>
 <div><button (click)="renew()">
-  Renew
+  Simulate Renew
 </button></div>
 <div><button (click)="logout()">
   Logout

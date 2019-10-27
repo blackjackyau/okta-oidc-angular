@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../user/user';
-import { selectCurrentUser } from '../user/state';
+import { selectCurrentUser, selectSSWS } from '../user/state';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +15,7 @@ import { selectCurrentUser } from '../user/state';
 export class HomeComponent implements OnInit {
 
   currentUser$: Observable<User>;
+  ssws$: Observable<string>;
 
   constructor(private router: Router,
               private store: Store<AppState>,
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.currentUser$ = this.store.pipe(select(selectCurrentUser));
+    this.ssws$ = this.store.pipe(select(selectSSWS));
   }
 
   logout() {
@@ -30,7 +32,7 @@ export class HomeComponent implements OnInit {
 
   renew() {
     (this.oktaAuthService as any).oktaAuth.token.getWithoutPrompt({
-      responseType: 'id_token', // or array of types
+      responseType: ['id_token', 'token'], // or array of types
     })
     .then(tokenOrTokens => {
       console.log(tokenOrTokens);

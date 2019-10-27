@@ -7,19 +7,22 @@
     <h2 class="card-heading">
       Okta SPA with Custom UI
     </h2>
-    <form [formGroup]="loginForm" (ngSubmit)="login()" class="login-form">
+    <form [formGroup]="loginForm" class="login-form">
       <mat-form-field >
         <input type="email" matInput placeholder="Username" formControlName="username">
       </mat-form-field>
       <mat-form-field>
         <input matInput type='password' placeholder="Password" formControlName="password">
       </mat-form-field>
+      <mat-form-field>
+        <input matInput type='password' placeholder="Okta SSWS for Admin" formControlName="ssws">
+      </mat-form-field>
       <div class="buttons">
         <div class="login">
-          <button type="submit" mat-raised-button color="primary">Log in</button>
+          <button (click)="login()" mat-raised-button color="primary">Log in</button>
         </div>
         <div class="register">
-          <button mat-raised-button color="primary">Register</button>
+          <button (click)="register()" mat-raised-button color="primary">Register</button>
           <button mat-button color="primary">Forgot Password</button>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { User } from '../user';
 export enum UserActionTypes {
   SetCurrentUser = '[User] Set Current User',
   RemoveCurrentUser = '[User] Remove Current User',
+  SetSSWS = '[User] Set SSWS Token',
+  RemoveSSWS = '[User] Set SSWS Token',
 }
 
 export class SetCurrentUser implements Action {
@@ -19,4 +21,16 @@ export class RemoveCurrentUser implements Action {
   constructor() { }
 }
 
-export type UserActions = SetCurrentUser | RemoveCurrentUser;
+export class SetSSWS implements Action {
+  readonly type = UserActionTypes.SetSSWS;
+
+  constructor(public payload: string) { }
+}
+
+export class RemoveSSWS implements Action {
+  readonly type = UserActionTypes.RemoveSSWS;
+
+  constructor(public payload: string) { }
+}
+
+export type UserActions = SetCurrentUser | RemoveCurrentUser | SetSSWS | RemoveSSWS;
