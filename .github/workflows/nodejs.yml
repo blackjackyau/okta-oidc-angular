@@ -20,7 +20,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm ci
-        arguments='--repo=https://github.com/blackjackyau/okta-oidc-angular-page --name="blackjackyau" --email=yau.yik.shiung@gmail.com' && npm run deploy-git
+        npm run deploy -- --repo=https://github.com/blackjackyau/okta-oidc-angular-page --name="blackjackyau" --email=yau.yik.shiung@gmail.com'
       env:
         CI: true
 
