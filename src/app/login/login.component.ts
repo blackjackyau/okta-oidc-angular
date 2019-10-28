@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { OktaSignInService } from '../okta/okta-sign-in.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import oktaConfig from '../.okta.config';
+import { environment } from '../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
 
@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   register() {
-    window.location.href = oktaConfig.oidc.registerUri;
+    window.location.href = environment.oidc.registerUri;
   }
 
 }

@@ -10,7 +10,6 @@ import {
   OKTA_CONFIG,
   OktaAuthModule
 } from '@okta/okta-angular';
-import oktaConfig from './.okta.config';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,7 +29,7 @@ const oktaConfigData = Object.assign({
     console.log('here here');
     router.navigate(['/login']);
   }
-}, oktaConfig.oidc);
+}, environment.oidc);
 
 @NgModule({
   declarations: [
