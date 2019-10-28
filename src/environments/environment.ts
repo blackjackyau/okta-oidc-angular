@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  oktaUrl: 'https://dev-875318.okta.com',
   oidc: {
     clientId: '0oam5zkpp9nqUwpq0356',
     issuer: 'https://dev-875318.okta.com/oauth2/default',

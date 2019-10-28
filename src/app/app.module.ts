@@ -4,7 +4,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { reducer } from './user/state/user.reducer';
+import { reducer as userReducer } from './user/state/user.reducer';
+import { reducer as userMgmtReducer } from './users/state/users.reducer';
 
 import {
   OKTA_CONFIG,
@@ -22,6 +23,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LogoutComponent } from './logout/logout.component';
+import { UsersComponent } from './users/users.component';
+import { UsersEffects } from './users/state/users.effect';
 
 
 const oktaConfigData = Object.assign({
@@ -37,6 +40,7 @@ const oktaConfigData = Object.assign({
     LoginComponent,
     LogoutComponent,
     HomeComponent,
+    UsersComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,13 +51,13 @@ const oktaConfigData = Object.assign({
     BrowserAnimationsModule,
     AppMaterialModule,
     AppRoutingModule,
-    StoreModule.forRoot({user: reducer}),
+    StoreModule.forRoot({user: userReducer, userMgmt: userMgmtReducer}),
     StoreDevtoolsModule.instrument({
       name: 'Okta Oidc',
       maxAge: 25,
       logOnly: environment.production
     }),
-    EffectsModule.forRoot([])
+    EffectsModule.forRoot([UsersEffects])
   ],
   providers: [
     { provide: OKTA_CONFIG, useValue: oktaConfigData },

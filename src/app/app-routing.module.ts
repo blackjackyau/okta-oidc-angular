@@ -9,6 +9,7 @@ import { LoggedInGuard } from './guards/logged-in.guard';
 import { LoginGuard } from './guards/login.guard';
 import { LogoutComponent } from './logout/logout.component';
 import { FragmentGuard } from './guards/fragment.guard';
+import { UsersComponent } from './users/users.component';
 
 const routes: Routes = [
   // runGuardsAndResolvers need to be 'always' as during the redirection from # callback url to / does not contain any query params changes
@@ -17,7 +18,12 @@ const routes: Routes = [
   { path: '', component: OktaCallbackComponent, canActivate: [FragmentGuard], runGuardsAndResolvers: 'always'},
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'logout', component: LogoutComponent },
-  { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [LoggedInGuard],
+    children: [
+      { path: 'users', component: UsersComponent, canActivate: [LoggedInGuard] },
+      { path: '', redirectTo: 'users', pathMatch: 'full' },
+    ]
+  },
   { path: '**', redirectTo: 'home' },
 ];
 

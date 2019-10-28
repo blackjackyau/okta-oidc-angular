@@ -41,7 +41,9 @@ export class LoggedInGuard implements CanActivate {
               map(userinfo => {
                 if (userinfo) {
                   console.log('userinfo');
-                  this.store.dispatch(new SetCurrentUser({id: userinfo.sub, userName: userinfo.email}));
+                  this.store.dispatch(new SetCurrentUser({
+                    id: userinfo.sub, userName: userinfo.email
+                  }));
                   this.syncSSWS();
                 }
                 return !!userinfo;

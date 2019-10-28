@@ -1,13 +1,34 @@
-Home Page
-<p *ngIf="currentUser$ | async as currentUser">
-  Welcome {{ currentUser.userName }}
-</p>
-<p *ngIf="ssws$ | async as ssws">
-  SSWS {{ ssws }}
-</p>
-<div><button (click)="renew()">
-  Simulate Renew
-</button></div>
-<div><button (click)="logout()">
-  Logout
-</button></div>
+<div>
+  <mat-toolbar color="accent" class="mat-elevation-z8">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="main-header-text">
+      <div>Admin Portal</div>
+    </div>
+    <button mat-button [matMenuTriggerFor]="appMenu">
+      <mat-icon>person</mat-icon>
+      <ng-container *ngIf="currentUser$ | async as user">{{ user.userName }}</ng-container>
+    </button>
+  </mat-toolbar>
+
+  <mat-menu #appMenu="matMenu" yPosition="below">
+    <button mat-menu-item (click)="logout()">Logout</button>
+  </mat-menu>
+
+  <mat-sidenav-container class="main-container">
+    <mat-sidenav #sidenav opened="{{!mobileQuery.matches}}" disableClose="{{!mobileQuery.matches}}" [mode]="mobileQuery.matches ? 'over' : 'side'"
+      [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list>
+        <a mat-list-item routerLink="{{menu.link}}" *ngFor="let menu of sideMenus">
+          <mat-icon color="primary" aria-hidden="true" aria-label="menu.label">{{menu.icon}}</mat-icon>
+          <span class="menu-label">{{menu.label}}</span>
+        </a>
+      </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

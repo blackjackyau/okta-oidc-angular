@@ -1,2 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+body {
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+
+  margin: 0px;
+
+  .main-header-text {
+      img {
+          display: inline-block;
+          vertical-align: middle;
+          height: 24px;
+          width: 24px;
+      }
+
+      div {
+          display: inline-block;
+          vertical-align: middle;
+      }
+  }
+}
