@@ -10,20 +10,20 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { LoadCurrentUser, LoadSSWS } from '../user/state/user.actions';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-admins',
+  templateUrl: './admins.component.html',
+  styleUrls: ['./admins.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class AdminsComponent implements OnInit {
 
   currentUser$: Observable<User>;
 
   sideMenus = [
-    // {
-    //   label: 'Manage Users',
-    //   link: 'users',
-    //   icon: 'person'
-    // }
+    {
+      label: 'Manage Users',
+      link: 'users',
+      icon: 'person'
+    }
   ];
 
   mobileQuery: MediaQueryList;
@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit {
     this.mobileQuery.addListener(this.mobileQueryListener);
 
     this.store.dispatch(new LoadCurrentUser());
-
+    this.store.dispatch(new LoadSSWS());
     this.currentUser$ = this.store.pipe(select(selectCurrentUser));
   }
 

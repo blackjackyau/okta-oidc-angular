@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { UsersService } from '../users.service';
-import { UserMgmtActionTypes, LoadUsersSuccess } from './users.actions';
+import { UserMgmtService } from '../user-mgmt.service';
+import { UserMgmtActionTypes, LoadUsersSuccess } from './user-mgmt.actions';
 import { switchMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class UsersEffects {
 
   constructor(private actions$: Actions,
-              private usersService: UsersService) { }
+              private usersService: UserMgmtService) { }
 
   @Effect()
   loadUsers$ = this.actions$.pipe(

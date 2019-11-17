@@ -1,0 +1,22 @@
+.main-header-text {
+  flex: 1 1 500px;
+  img {
+    padding: 10px;
+  }
+}
+
+.main-container {
+  height: calc(100vh - 64px);
+}
+
+.mat-list-item {
+  .menu-label {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+mat-toolbar {
+  height: 56px;
+  font-size: 18px;
+}

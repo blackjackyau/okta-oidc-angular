@@ -1,15 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { reducer as userReducer } from './user/state/user.reducer';
-import { reducer as userMgmtReducer } from './users/state/users.reducer';
 
 import {
   OKTA_CONFIG,
-  OktaAuthModule
+  OktaAuthModule,
+  OktaAuthService
 } from '@okta/okta-angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -17,14 +17,13 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AppMaterialModule } from './app-material.module';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LogoutComponent } from './logout/logout.component';
-import { UsersComponent } from './users/users.component';
-import { UsersEffects } from './users/state/users.effect';
+import { CurrentUserEffects, SSWSEffects } from './user/state/user.effect';
 
 
 const oktaConfigData = Object.assign({
@@ -40,7 +39,6 @@ const oktaConfigData = Object.assign({
     LoginComponent,
     LogoutComponent,
     HomeComponent,
-    UsersComponent,
   ],
   imports: [
     BrowserModule,
@@ -51,13 +49,13 @@ const oktaConfigData = Object.assign({
     BrowserAnimationsModule,
     AppMaterialModule,
     AppRoutingModule,
-    StoreModule.forRoot({user: userReducer, userMgmt: userMgmtReducer}),
+    StoreModule.forRoot({user: userReducer}),
     StoreDevtoolsModule.instrument({
       name: 'Okta Oidc',
       maxAge: 25,
       logOnly: environment.production
     }),
-    EffectsModule.forRoot([UsersEffects])
+    EffectsModule.forRoot([CurrentUserEffects, SSWSEffects])
   ],
   providers: [
     { provide: OKTA_CONFIG, useValue: oktaConfigData },

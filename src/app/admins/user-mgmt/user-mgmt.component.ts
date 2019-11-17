@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { UsersService } from './users.service';
 import { Observable } from 'rxjs';
-import { User } from '../user/user';
-import { AppState } from '../state/app.state';
+import { User } from '../../user/user';
+import { AppState } from '../../state/app.state';
 import { Store, select } from '@ngrx/store';
-import { LoadUsers } from './state/users.actions';
+import { LoadUsers } from './state/user-mgmt.actions';
 import { selectUsers } from './state';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  selector: 'app-user-mgmt',
+  templateUrl: './user-mgmt.component.html',
+  styleUrls: ['./user-mgmt.component.scss']
 })
-export class UsersComponent implements OnInit {
+export class UserMgmtComponent implements OnInit {
 
   users$: Observable<User[]>;
 

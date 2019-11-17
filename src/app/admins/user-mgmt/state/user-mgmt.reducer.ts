@@ -1,5 +1,5 @@
 import { UserMgmtState } from '.';
-import { UserMgmtActionTypes, UserMgmtActions } from './users.actions';
+import { UserMgmtActionTypes, UserMgmtActions } from './user-mgmt.actions';
 
 const initialState: UserMgmtState = {
   users: null

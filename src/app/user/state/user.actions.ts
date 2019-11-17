@@ -3,10 +3,18 @@ import { Action } from '@ngrx/store';
 import { User } from '../user';
 
 export enum UserActionTypes {
+  LoadCurrentUser = '[User] Load Current User',
   SetCurrentUser = '[User] Set Current User',
   RemoveCurrentUser = '[User] Remove Current User',
+  LoadSSWS = '[User] Load SSWS',
   SetSSWS = '[User] Set SSWS Token',
   RemoveSSWS = '[User] Set SSWS Token',
+}
+
+export class LoadCurrentUser implements Action {
+  readonly type = UserActionTypes.LoadCurrentUser;
+
+  constructor() { }
 }
 
 export class SetCurrentUser implements Action {
@@ -17,6 +25,12 @@ export class SetCurrentUser implements Action {
 
 export class RemoveCurrentUser implements Action {
   readonly type = UserActionTypes.RemoveCurrentUser;
+
+  constructor() { }
+}
+
+export class LoadSSWS implements Action {
+  readonly type = UserActionTypes.LoadSSWS;
 
   constructor() { }
 }
@@ -33,4 +47,4 @@ export class RemoveSSWS implements Action {
   constructor(public payload: string) { }
 }
 
-export type UserActions = SetCurrentUser | RemoveCurrentUser | SetSSWS | RemoveSSWS;
+export type UserActions = SetCurrentUser | RemoveCurrentUser | LoadCurrentUser | SetSSWS | RemoveSSWS;

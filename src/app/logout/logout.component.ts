@@ -21,6 +21,7 @@ export class LogoutComponent implements OnInit {
     from(this.authService.logout('/')).pipe(
       finalize(() => {
         this.store.dispatch(new RemoveCurrentUser());
+        localStorage.removeItem('okta-ssws');
         this.router.navigate(['login']);
       })
     ).

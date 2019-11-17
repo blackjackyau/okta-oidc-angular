@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../user/user';
-import { environment } from '../../environments/environment';
+import { User } from '../../user/user';
+import { environment } from '../../../environments/environment';
 import { map, flatMap, toArray, switchMap } from 'rxjs/operators';
-import { AppState } from '../state/app.state';
+import { AppState } from '../../state/app.state';
 import { Store, select } from '@ngrx/store';
-import { selectSSWS } from '../user/state';
+import { selectSSWS } from '../../user/state';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
+export class UserMgmtService {
 
   baseUrl: string;
   ssws$: Observable<string>;
