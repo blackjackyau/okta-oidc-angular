@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/blackjackyau/okta-oidc-angular/workflows/Node%20CI/badge.svg)](https://github.com/blackjackyau/okta-oidc-angular/actions)
+
 # OktaOidcAngularNgRx
 
 ## Public client with Implicit grant
