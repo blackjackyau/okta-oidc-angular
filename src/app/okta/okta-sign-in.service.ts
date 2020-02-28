@@ -44,4 +44,13 @@ export class OktaSignInService {
     };
     await this.authService.loginRedirect(undefined, params);
   }
+
+  async signInFederatedIdpRedirectPKCEAuthCode() {
+    const params = {
+      idp: '0oa2z3gfu5XPR3E0O357',
+      responseType: ['code'],
+      pkce: true
+    };
+    await this.authService.loginRedirect(undefined, params);
+  }
 }
