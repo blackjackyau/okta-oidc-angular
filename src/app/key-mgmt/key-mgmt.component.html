@@ -1,0 +1,26 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Key Management</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <h2>Id Token</h2>
+    <h4>Plain</h4>
+    <p *ngIf="idToken">
+      {{ idToken }}
+    </p>
+    <h4>Base64 Decode</h4>
+    <pre *ngIf="idToken">{{ parseJwt(idToken) | json }}</pre>
+    <mat-divider></mat-divider>
+    <h2>Access Token</h2>
+    <h4>Plain</h4>
+    <p *ngIf="accessToken">
+      {{ accessToken }}
+    </p>
+    <h4>Base64 Decode</h4>
+    <pre *ngIf="accessToken">{{ parseJwt(accessToken) | json }}</pre>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="renewIdToken()" mat-raised-button color="primary">Renew Id Token</button>
+    <button (click)="renewAccessToken()" mat-raised-button color="primary">Renew Access Token</button>
+  </mat-card-actions>
+</mat-card>

@@ -9,7 +9,6 @@ import { reducer as userReducer } from './user/state/user.reducer';
 import {
   OKTA_CONFIG,
   OktaAuthModule,
-  OktaAuthService
 } from '@okta/okta-angular';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,6 +23,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LogoutComponent } from './logout/logout.component';
 import { CurrentUserEffects, SSWSEffects } from './user/state/user.effect';
+import { KeyMgmtComponent } from './key-mgmt/key-mgmt.component';
+import { AppSharedModule } from './app-shared.module';
 
 
 const oktaConfigData = Object.assign({
@@ -49,6 +50,7 @@ const oktaConfigData = Object.assign({
     BrowserAnimationsModule,
     AppMaterialModule,
     AppRoutingModule,
+    AppSharedModule,
     StoreModule.forRoot({user: userReducer}),
     StoreDevtoolsModule.instrument({
       name: 'Okta Oidc',

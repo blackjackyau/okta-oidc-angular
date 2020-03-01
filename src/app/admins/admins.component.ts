@@ -23,6 +23,11 @@ export class AdminsComponent implements OnInit {
       label: 'Manage Users',
       link: 'users',
       icon: 'person'
+    },
+    {
+      label: 'Key Management',
+      link: 'key-mgmt',
+      icon: 'vpn_key'
     }
   ];
 

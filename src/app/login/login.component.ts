@@ -42,6 +42,10 @@ export class LoginComponent implements OnInit {
       });
   }
 
+  federatedLogin() {
+    this.signInService.signInFederatedIdpRedirectPKCEAuthCode();
+  }
+
   register() {
     window.location.href = environment.oidc.registerUri;
   }

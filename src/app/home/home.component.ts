@@ -19,11 +19,11 @@ export class HomeComponent implements OnInit {
   currentUser$: Observable<User>;
 
   sideMenus = [
-    // {
-    //   label: 'Manage Users',
-    //   link: 'users',
-    //   icon: 'person'
-    // }
+    {
+      label: 'Key Management',
+      link: 'key-mgmt',
+      icon: 'vpn_key'
+    }
   ];
 
   mobileQuery: MediaQueryList;
