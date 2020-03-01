@@ -9,6 +9,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { UsersEffects } from './user-mgmt/state/user-mgmt.effect';
 import { UserMgmtComponent } from './user-mgmt/user-mgmt.component';
 import { AppMaterialModule } from '../app-material.module';
+import { AppSharedModule } from '../app-shared.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import { AppMaterialModule } from '../app-material.module';
     CommonModule,
     AdminsRoutingModule,
     AppMaterialModule,
+    AppSharedModule,
     StoreModule.forFeature('userMgmt', reducer),
     EffectsModule.forFeature([UsersEffects])
   ]
