@@ -27,6 +27,14 @@
         </div>
       </div>
     </form>
-    <button (click)="federatedLogin()" mat-raised-button color="primary">Federated Log in (Dev CCB) using SAML 2.0</button>
+    <p>
+      <button (click)="federatedLogin()" mat-raised-button color="primary">Federated Log in (Dev CCB) using SAML 2.0</button>
+    </p>
+    <p>
+      <button (click)="federatedOidcLogin()" mat-raised-button color="primary">Federated Log in (Dev Oidc) using Oidc</button>
+    </p>
+    <p>
+      <button (click)="federatedKeycloakOidcLogin()" mat-raised-button color="primary">Federated Log in (Dev Oidc) using Oidc</button>
+    </p>
   </div>
 </div>

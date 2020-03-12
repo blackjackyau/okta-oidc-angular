@@ -42,8 +42,12 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  federatedLogin() {
-    this.signInService.signInFederatedIdpRedirectPKCEAuthCode();
+  federatedSaml2Login() {
+    this.signInService.signInSaml2FederatedIdpRedirectPKCEAuthCode();
+  }
+
+  federatedOidcLogin() {
+    this.signInService.signInOidcFederatedIdpRedirectPKCEAuthCode();
   }
 
   register() {
