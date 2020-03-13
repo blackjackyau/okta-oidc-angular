@@ -1,19 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable, from, iif, of } from 'rxjs';
-import { OktaAuthService } from '@okta/okta-angular';
-import { AppState } from '../state/app.state';
-import { Store } from '@ngrx/store';
-import { mergeMap, map, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { tap, switchMap } from 'rxjs/operators';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginGuard implements CanActivate {
 
-  constructor(private authService: OktaAuthService,
-              private store: Store<AppState>,
-              private router: Router) {
+  constructor(private router: Router, private oidcSecurityService: OidcSecurityService) {
   }
 
   canActivate(
@@ -21,18 +17,20 @@ export class LoginGuard implements CanActivate {
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    return from(this.authService.isAuthenticated()).pipe(
-      mergeMap(isAuthenticated => iif(() => isAuthenticated,
-        this.homeRedirect(),
-        of(true)
-      ))
+    return this.oidcSecurityService.getIsAuthorized().pipe(
+      switchMap(authenticated => {
+        if (authenticated) {
+          return this.homeRedirect();
+        }
+        return of(true);
+      })
     );
   }
 
   homeRedirect(): Observable<boolean> {
     return of(false).pipe(
       tap(_ => {
-        this.authService.loginRedirect();
+        this.router.navigate(['home']);
       })
     );
   }

@@ -5,19 +5,20 @@ import { OktaAuthService } from '@okta/okta-angular';
 import { from } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { SetCurrentUser, UserActionTypes, LoadCurrentUser, SetSSWS, LoadSSWS } from './user.actions';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 
 @Injectable()
 export class CurrentUserEffects implements OnInitEffects {
 
   constructor(private actions$: Actions,
-              private authService: OktaAuthService) { }
+              private oidcSecurityService: OidcSecurityService) { }
 
   @Effect()
   loadUser$ = this.actions$.pipe(
     ofType(UserActionTypes.LoadCurrentUser),
     switchMap(() => {
-      return from(this.authService.getUser()).pipe(
+      return from(this.oidcSecurityService.getUserData()).pipe(
         tap(userinfo => console.log(userinfo)),
         map(userinfo => {
           if (userinfo) {

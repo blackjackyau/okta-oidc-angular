@@ -1,0 +1,17 @@
+{
+    "stsServer": "http://localhost:8080/auth/realms/ExperianONE",
+    "redirect_url": "http://localhost:4200",
+    "client_id": "ExperianONE USECASE JOURNEY",
+    "response_type": "code",
+    "scope": "openid profile email",
+    "post_logout_redirect_uri": "http://localhost:4200",
+    "start_checksession": true,
+    "silent_renew": false,
+    "silent_renew_url": "https://localhost:44311/silent-renew.html",
+    "post_login_route": "/",
+    "forbidden_route": "/forbidden",
+    "unauthorized_route": "/unauthorized",
+    "log_console_warning_active": true,
+    "log_console_debug_active": true,
+    "max_id_token_iat_offset_allowed_in_seconds": 10
+}

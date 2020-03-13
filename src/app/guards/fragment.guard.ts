@@ -20,7 +20,7 @@ export class FragmentGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (state.url.startsWith('/#') || state.url.startsWith('#')) {
+    if (state.url.startsWith('/?') || state.url.startsWith('?')) {
       console.log('has fragment');
       return true;
     } else {

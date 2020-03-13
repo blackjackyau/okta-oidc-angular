@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { OktaAuthService } from '@okta/okta-angular';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-key-mgmt',
@@ -11,7 +12,8 @@ export class KeyMgmtComponent implements OnInit {
   accessToken: string;
   idToken: string;
 
-  constructor(private authService: OktaAuthService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private authService: OktaAuthService, private changeDetectorRef: ChangeDetectorRef
+    , private oidcSecurityService: OidcSecurityService) {
   }
 
   ngOnInit() {
@@ -20,17 +22,13 @@ export class KeyMgmtComponent implements OnInit {
   }
 
   reloadAccessTokenView() {
-    this.authService.getAccessToken().then(accessToken => {
-      this.accessToken = accessToken;
-      this.changeDetectorRef.detectChanges();
-    });
+    this.accessToken = this.oidcSecurityService.getToken();
+    this.changeDetectorRef.detectChanges();
   }
 
   reloadIdTokenView() {
-    this.authService.getIdToken().then(idToken => {
-      this.idToken = idToken;
-      this.changeDetectorRef.detectChanges();
-    });
+    this.idToken = this.oidcSecurityService.getIdToken();
+    this.changeDetectorRef.detectChanges();
   }
 
   parseJwt(token) {
@@ -43,14 +41,7 @@ export class KeyMgmtComponent implements OnInit {
   };
 
   renewIdToken() {
-    (this.authService as any).oktaAuth.tokenManager.renew('idToken')
-    .then(tokenOrTokens => {
-      console.log(tokenOrTokens);
-      this.reloadIdTokenView();
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    this.oidcSecurityService.startCheckingSilentRenew();
   }
 
   renewAccessToken() {

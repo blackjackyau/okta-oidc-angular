@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
 
   isSubmitted = false;
 
-  constructor(private signInService: OktaSignInService,
+  constructor(private oidcSecurityService: OidcSecurityService,
+              private signInService: OktaSignInService,
               private formBuilder: FormBuilder,
               private store: Store<AppState>) {
   }
@@ -48,6 +50,13 @@ export class LoginComponent implements OnInit {
 
   federatedOidcLogin() {
     this.signInService.signInOidcFederatedIdpRedirectPKCEAuthCode();
+  }
+
+  federatedKeyCloakOidcLogin() {
+    this.oidcSecurityService.setCustomRequestParameters({
+      "kc_idp_hint": "saml"
+    });
+    this.oidcSecurityService.authorize();
   }
 
   register() {
