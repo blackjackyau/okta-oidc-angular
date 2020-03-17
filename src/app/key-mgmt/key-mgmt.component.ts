@@ -39,13 +39,10 @@ export class KeyMgmtComponent implements OnInit {
   };
 
   renewIdToken() {
-    (this.authService as any).oktaAuth.tokenManager.renew('idToken')
-    .then(tokenOrTokens => {
-      console.log(tokenOrTokens);
-      this.reloadIdTokenView();
-    })
-    .catch(err => {
-      console.log(err);
+    this.authService.renew().then(() => {
+      this.idToken = this.authService.getIdToken();
+      this.accessToken = this.authService.getAccessToken();
+      this.changeDetectorRef.detectChanges();
     });
   }
 

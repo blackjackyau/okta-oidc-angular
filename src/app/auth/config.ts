@@ -4,6 +4,7 @@ export interface OidcConfig {
   
     clientId: string,               // client_id
     filterProtocolClaims?: boolean, // filterProtocolClaims
+    silentRedirectUri: string,
 
     grantType?: string,
     issuer: string,                 // authority

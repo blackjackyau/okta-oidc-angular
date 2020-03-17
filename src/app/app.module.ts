@@ -26,6 +26,7 @@ import { CurrentUserEffects, SSWSEffects } from './user/state/user.effect';
 import { AppSharedModule } from './app-shared.module';
 import { OidcConfigService } from './auth/config.service';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
+import { SilenceAuthCallbackComponent } from './auth-callback/silence-auth-callback.component';
 
 
 const oktaConfigData = Object.assign({
@@ -42,6 +43,7 @@ const oktaConfigData = Object.assign({
     LogoutComponent,
     HomeComponent,
     AuthCallbackComponent,
+    SilenceAuthCallbackComponent,
   ],
   imports: [
     BrowserModule,

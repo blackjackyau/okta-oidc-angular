@@ -39,6 +39,8 @@ export class OidcAuthService {
             client_id: this.config.clientId,
             redirect_uri: this.config.redirectUri,
             post_logout_redirect_uri: this.config.postLogoutRedirectUri,
+            silent_redirect_uri: this.config.silentRedirectUri,
+            includeIdTokenInSilentRenew: true,
             response_type: this.config.responseType,
             scope: this.config.scope,
             filterProtocolClaims: this.config.filterProtocolClaims,
@@ -118,6 +120,10 @@ export class OidcAuthService {
         return this.authService.signinRedirect(args);
     }
 
+    public async handleSigninSilentCallback(): Promise<any> {
+        return this.authService.signinSilentCallback();
+    }
+
     public async handleRedirectCallback(): Promise<void> {
 
         console.info('OidcAuthService: handleRedirectCallback()');
@@ -140,6 +146,14 @@ export class OidcAuthService {
         this.authState$.next(false);
 
         this.authService.signoutRedirect();
+        
+    }
+
+    public async renew() {
+        this.currentUser = await this.authService.signinSilent();
+        console.log(`token renew`);
+        console.log(this.currentUser);
+        this.authState$.next(!!this.currentUser);
     }
 
     //
