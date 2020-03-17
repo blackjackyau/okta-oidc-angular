@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
+import { OidcAuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   isSubmitted = false;
 
   constructor(private signInService: OktaSignInService,
+              private authService: OidcAuthService,
               private formBuilder: FormBuilder,
               private store: Store<AppState>) {
   }
@@ -43,7 +45,7 @@ export class LoginComponent implements OnInit {
   }
 
   federatedLogin() {
-    this.signInService.signInFederatedIdpRedirectPKCEAuthCode();
+    this.authService.loginWithRedirect();
   }
 
   register() {
