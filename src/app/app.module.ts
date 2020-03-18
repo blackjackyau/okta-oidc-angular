@@ -23,9 +23,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 import { LogoutComponent } from './logout/logout.component';
 import { CurrentUserEffects, SSWSEffects } from './user/state/user.effect';
-import { KeyMgmtComponent } from './key-mgmt/key-mgmt.component';
 import { AppSharedModule } from './app-shared.module';
-
+import { OidcConfigService } from './auth/config.service';
+import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 
 const oktaConfigData = Object.assign({
   onAuthRequired: ({ oktaAuth, router }) => {
@@ -40,6 +40,7 @@ const oktaConfigData = Object.assign({
     LoginComponent,
     LogoutComponent,
     HomeComponent,
+    AuthCallbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +62,8 @@ const oktaConfigData = Object.assign({
   ],
   providers: [
     { provide: OKTA_CONFIG, useValue: oktaConfigData },
-    CookieService
+    { provide: OidcConfigService, useValue: environment.oidc },
+    CookieService,
   ],
   bootstrap: [AppComponent]
 })

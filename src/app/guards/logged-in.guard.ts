@@ -6,13 +6,14 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../state/app.state';
 import { selectCurrentUser } from '../user/state';
 import { tap, switchMap } from 'rxjs/operators';
+import { OidcAuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoggedInGuard implements CanActivate {
 
-  constructor(private router: Router, private authService: OktaAuthService) {
+  constructor(private router: Router, private authService: OidcAuthService) {
   }
 
   canActivate(
@@ -20,7 +21,7 @@ export class LoggedInGuard implements CanActivate {
     state: RouterStateSnapshot,
     ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-      return from(this.authService.isAuthenticated()).pipe(
+      return from(this.authService.isAuthenticatedAsync()).pipe(
         switchMap(authenticated => {
           if (authenticated) {
             return of(true);

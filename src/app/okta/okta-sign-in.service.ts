@@ -28,29 +28,29 @@ export class OktaSignInService {
     );
   }
 
-  async signInRedirectImplicit(sessionToken: string) {
-    const params = {
-      responseType: ['id_token', 'token'],
-      sessionToken, // session token is required to pass during the auth service, if not it will call okta
-    };
-    await this.authService.loginRedirect(undefined, params);
-  }
+  // async signInRedirectImplicit(sessionToken: string) {
+  //   const params = {
+  //     responseType: ['id_token', 'token'],
+  //     sessionToken, // session token is required to pass during the auth service, if not it will call okta
+  //   };
+  //   await this.authService.loginRedirect(undefined, params);
+  // }
 
-  async signInRedirectPKCEAuthCode(sessionToken: string) {
-    const params = {
-      responseType: ['code'],
-      sessionToken, // session token is required to pass during the auth service, if not it will call okta
-      pkce: true
-    };
-    await this.authService.loginRedirect(undefined, params);
-  }
+  // async signInRedirectPKCEAuthCode(sessionToken: string) {
+  //   const params = {
+  //     responseType: ['code'],
+  //     sessionToken, // session token is required to pass during the auth service, if not it will call okta
+  //     pkce: true
+  //   };
+  //   await this.authService.loginRedirect(undefined, params);
+  // }
 
-  async signInFederatedIdpRedirectPKCEAuthCode() {
-    const params = {
-      idp: '0oa2z3gfu5XPR3E0O357',
-      responseType: ['code'],
-      pkce: true
-    };
-    await this.authService.loginRedirect(undefined, params);
-  }
+  // async signInFederatedIdpRedirectPKCEAuthCode() {
+  //   const params = {
+  //     idp: '0oa2z3gfu5XPR3E0O357',
+  //     responseType: ['code'],
+  //     pkce: true
+  //   };
+  //   await this.authService.loginRedirect(undefined, params);
+  // }
 }

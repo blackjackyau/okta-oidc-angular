@@ -6,13 +6,14 @@ export const environment = {
   production: false,
   oktaUrl: 'https://dev-875318.okta.com',
   oidc: {
-    idp: '0oa2z3gfu5XPR3E0O357',
     clientId: '0oam5zkpp9nqUwpq0356',
     issuer: 'https://dev-875318.okta.com/oauth2/default',
     redirectUri: 'http://localhost:4200',
+    silentRedirectUri: 'http://localhost:4200',
     scope: 'openid profile email',
-    responseType: 'id_token token',
-    registerUri: 'https://dev-875318.okta.com/signin/register'
+    responseType: 'code',
+    registerUri: 'https://dev-875318.okta.com/signin/register',
+    postLogoutRedirectUri: 'http://localhost:4200'
   }
 };
 

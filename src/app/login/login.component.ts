@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
+import { OidcAuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
   isSubmitted = false;
 
   constructor(private signInService: OktaSignInService,
+              private authService: OidcAuthService,
               private formBuilder: FormBuilder,
               private store: Store<AppState>) {
   }
@@ -38,12 +40,18 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.value.ssws) {
           localStorage.setItem('okta-ssws', this.loginForm.value.ssws);
         }
-        this.signInService.signInRedirectPKCEAuthCode(result.sessionToken);
+        const param = {
+          sessionToken: result.sessionToken
+        }
+        this.authService.loginWithRedirect(param);
       });
   }
 
   federatedLogin() {
-    this.signInService.signInFederatedIdpRedirectPKCEAuthCode();
+    const param = {
+      idp: '0oa2z3gfu5XPR3E0O357'
+    }
+    this.authService.loginWithRedirect(param);
   }
 
   register() {
