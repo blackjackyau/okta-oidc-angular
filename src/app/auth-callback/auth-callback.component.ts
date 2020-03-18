@@ -7,10 +7,22 @@ import { OidcAuthService } from '../auth/auth.service';
 export class AuthCallbackComponent implements OnInit {
 
   constructor(authService: OidcAuthService) {
-    authService.handleRedirectCallback();
+    if (this.inIframe()) {
+      authService.handleSigninSilentCallback();
+    } else {
+      authService.handleRedirectCallback();
+    }
   }
 
   ngOnInit() {
+  }
+
+  private inIframe() {
+    try {
+      return window.self !== window.top;
+    } catch (e) {
+      return true;
+    }
   }
 
 }

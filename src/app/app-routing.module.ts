@@ -12,7 +12,6 @@ import { FragmentGuard } from './guards/fragment.guard';
 import { AdminRedirectGuard } from './guards/admin-redirect.guard';
 import { KeyMgmtComponent } from './key-mgmt/key-mgmt.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
-import { SilenceAuthCallbackComponent as SilentAuthCallbackComponent } from './auth-callback/silence-auth-callback.component';
 
 const routes: Routes = [
   // runGuardsAndResolvers need to be 'always' as during the redirection from # callback url to / does not contain any query params changes
@@ -21,7 +20,6 @@ const routes: Routes = [
   { path: '', component: AuthCallbackComponent, canActivate: [FragmentGuard], runGuardsAndResolvers: 'always' },
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'logout', component: LogoutComponent },
-  { path: 'silent-callback', component: SilentAuthCallbackComponent },
   {
     path: 'home', component: HomeComponent, canActivate: [LoggedInGuard, AdminRedirectGuard],
     children: [

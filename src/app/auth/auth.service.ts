@@ -44,8 +44,7 @@ export class OidcAuthService {
             response_type: this.config.responseType,
             scope: this.config.scope,
             filterProtocolClaims: this.config.filterProtocolClaims,
-            loadUserInfo: this.config.loadUserInfo,
-            extraQueryParams: this.config.extraQueryParams
+            loadUserInfo: this.config.loadUserInfo
         };
 
         this.authService = new oidcClient.UserManager(oidcConfig);
@@ -113,10 +112,15 @@ export class OidcAuthService {
         this.accessToken = this.currentUser.access_token;
     }
 
-    public async loginWithRedirect(args?: any): Promise<void> {
+    public async loginWithRedirect(param?: any): Promise<void> {
 
         console.info('OidcAuthService: loginWithRedirect()');
-
+        var args = undefined;
+        if (param) {
+            args = {
+                extraQueryParams: param
+            };
+        }
         return this.authService.signinRedirect(args);
     }
 
@@ -146,7 +150,7 @@ export class OidcAuthService {
         this.authState$.next(false);
 
         this.authService.signoutRedirect();
-        
+
     }
 
     public async renew() {

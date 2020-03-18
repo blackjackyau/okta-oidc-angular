@@ -40,12 +40,18 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.value.ssws) {
           localStorage.setItem('okta-ssws', this.loginForm.value.ssws);
         }
-        this.signInService.signInRedirectPKCEAuthCode(result.sessionToken);
+        const param = {
+          sessionToken: result.sessionToken
+        }
+        this.authService.loginWithRedirect(param);
       });
   }
 
   federatedLogin() {
-    this.authService.loginWithRedirect();
+    const param = {
+      idp: '0oa2z3gfu5XPR3E0O357'
+    }
+    this.authService.loginWithRedirect(param);
   }
 
   register() {
