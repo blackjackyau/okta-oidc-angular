@@ -5,9 +5,19 @@
 export const environment = {
   production: false,
   oktaUrl: 'https://dev-875318.okta.com',
+  // oidc: {
+  //   clientId: '0oam5zkpp9nqUwpq0356',
+  //   issuer: 'https://dev-875318.okta.com/oauth2/default',
+  //   redirectUri: 'http://localhost:4200',
+  //   silentRedirectUri: 'http://localhost:4200',
+  //   scope: 'openid profile email',
+  //   responseType: 'code',
+  //   registerUri: 'https://dev-875318.okta.com/signin/register',
+  //   postLogoutRedirectUri: 'http://localhost:4200'
+  // },
   oidc: {
-    clientId: '0oam5zkpp9nqUwpq0356',
-    issuer: 'https://dev-875318.okta.com/oauth2/default',
+    clientId: 'ExperianONE USECASE JOURNEY',
+    issuer: 'http://localhost:8080/auth/realms/ExperianONE',
     redirectUri: 'http://localhost:4200',
     silentRedirectUri: 'http://localhost:4200',
     scope: 'openid profile email',

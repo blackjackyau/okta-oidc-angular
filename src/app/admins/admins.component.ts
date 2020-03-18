@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
 import { AppState } from '../state/app.state';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -8,6 +7,7 @@ import { User } from '../user/user';
 import { selectCurrentUser, selectSSWS } from '../user/state';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { LoadCurrentUser, LoadSSWS } from '../user/state/user.actions';
+import { OidcAuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-admins',
@@ -37,7 +37,7 @@ export class AdminsComponent implements OnInit {
 
   constructor(private router: Router,
               private store: Store<AppState>,
-              private oktaAuthService: OktaAuthService,
+              private authService: OidcAuthService,
               private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher) { }
 
@@ -55,18 +55,6 @@ export class AdminsComponent implements OnInit {
 
   logout() {
     this.router.navigate(['logout']);
-  }
-
-  renew() {
-    (this.oktaAuthService as any).oktaAuth.token.getWithoutPrompt({
-      responseType: ['id_token', 'token'], // or array of types
-    })
-    .then(tokenOrTokens => {
-      console.log(tokenOrTokens);
-    })
-    .catch(err => {
-      console.log(err);
-    });
   }
 
   OnDestroy(): void {

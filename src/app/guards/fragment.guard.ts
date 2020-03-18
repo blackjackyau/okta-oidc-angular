@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable, from, iif, of } from 'rxjs';
-import { OktaAuthService } from '@okta/okta-angular';
+import { Observable } from 'rxjs';
 import { AppState } from '../state/app.state';
 import { Store } from '@ngrx/store';
-import { mergeMap, map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FragmentGuard implements CanActivate {
 
-  constructor(private authService: OktaAuthService,
-              private store: Store<AppState>,
+  constructor(private store: Store<AppState>,
               private router: Router) {
   }
 

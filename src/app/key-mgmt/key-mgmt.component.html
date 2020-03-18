@@ -20,7 +20,6 @@
     <pre *ngIf="accessToken">{{ parseJwt(accessToken) | json }}</pre>
   </mat-card-content>
   <mat-card-actions>
-    <button (click)="renewIdToken()" mat-raised-button color="primary">Renew Id Token</button>
-    <button (click)="renewAccessToken()" mat-raised-button color="primary">Renew Access Token</button>
+    <button (click)="renewToken()" mat-raised-button color="primary">Renew Token</button>
   </mat-card-actions>
 </mat-card>

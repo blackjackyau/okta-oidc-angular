@@ -1,13 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
 import { AppState } from '../state/app.state';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../user/user';
-import { selectCurrentUser, selectSSWS } from '../user/state';
+import { selectCurrentUser } from '../user/state';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { LoadCurrentUser, LoadSSWS } from '../user/state/user.actions';
+import { LoadCurrentUser } from '../user/state/user.actions';
 import { OidcAuthService } from '../auth/auth.service';
 
 @Component({

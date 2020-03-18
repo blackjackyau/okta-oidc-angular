@@ -47,9 +47,16 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  federatedLogin() {
+  federatedLoginOktaSAML2() {
     const param = {
       idp: '0oa2z3gfu5XPR3E0O357'
+    }
+    this.authService.loginWithRedirect(param);
+  }
+
+  federatedLoginKeycloak() {
+    const param = {
+      kc_idp_hint: 'saml'
     }
     this.authService.loginWithRedirect(param);
   }

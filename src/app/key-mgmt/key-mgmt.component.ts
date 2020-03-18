@@ -38,23 +38,11 @@ export class KeyMgmtComponent implements OnInit {
     return JSON.parse(jsonPayload);
   };
 
-  renewIdToken() {
+  renewToken() {
     this.authService.renew().then(() => {
       this.idToken = this.authService.getIdToken();
       this.accessToken = this.authService.getAccessToken();
       this.changeDetectorRef.detectChanges();
     });
   }
-
-  renewAccessToken() {
-    (this.authService as any).oktaAuth.tokenManager.renew('accessToken')
-    .then(tokenOrTokens => {
-      console.log(tokenOrTokens);
-      this.reloadAccessTokenView();
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
-
 }
