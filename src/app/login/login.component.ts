@@ -47,9 +47,16 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  federatedLogin() {
+  federatedSAML2Login() {
     const param = {
       idp: '0oa2z3gfu5XPR3E0O357'
+    }
+    this.authService.loginWithRedirect(param);
+  }
+
+  federatedOIDCLogin() {
+    const param = {
+      idp: '0oa30v9njcVClHoRj357'
     }
     this.authService.loginWithRedirect(param);
   }
