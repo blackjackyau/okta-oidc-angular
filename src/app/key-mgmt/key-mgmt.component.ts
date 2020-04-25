@@ -8,24 +8,26 @@ import { OidcAuthService } from '../auth/auth.service';
 })
 export class KeyMgmtComponent implements OnInit {
 
-  accessToken: string;
-  idToken: string;
+  accessTokenString: string;
+  idTokenString: string;
+
+  accessToken: Token;
+  idToken: Token;
+
+  currentTime = Math.trunc(Date.now() / 1000);
 
   constructor(private authService: OidcAuthService, private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
-    this.reloadAccessTokenView();
-    this.reloadIdTokenView();
+    this.reloadView();
   }
 
-  reloadAccessTokenView() {
-    this.accessToken = this.authService.getAccessToken();
-    this.changeDetectorRef.detectChanges();
-  }
-
-  reloadIdTokenView() {
-    this.idToken = this.authService.getIdToken();
+  reloadView() {
+    this.accessTokenString = this.authService.getAccessToken();
+    this.accessToken = this.parseJwt(this.accessTokenString);
+    this.idTokenString = this.authService.getIdToken();
+    this.idToken = this.parseJwt(this.idTokenString);
     this.changeDetectorRef.detectChanges();
   }
 
@@ -38,23 +40,14 @@ export class KeyMgmtComponent implements OnInit {
     return JSON.parse(jsonPayload);
   };
 
-  renewIdToken() {
+  renew() {
     this.authService.renew().then(() => {
-      this.idToken = this.authService.getIdToken();
-      this.accessToken = this.authService.getAccessToken();
-      this.changeDetectorRef.detectChanges();
+      this.reloadView();
     });
   }
+}
 
-  renewAccessToken() {
-    (this.authService as any).oktaAuth.tokenManager.renew('accessToken')
-    .then(tokenOrTokens => {
-      console.log(tokenOrTokens);
-      this.reloadAccessTokenView();
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
-
+interface Token {
+  iat: number
+  exp: number
 }

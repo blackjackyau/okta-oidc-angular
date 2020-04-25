@@ -4,23 +4,36 @@
   </mat-card-header>
   <mat-card-content>
     <h2>Id Token</h2>
-    <h4>Plain</h4>
+    <h4>Expiration</h4>
     <p *ngIf="idToken">
-      {{ idToken }}
+      Total Expiration = {{ (idToken.exp - idToken.iat) }} seconds
+    </p>
+    <p *ngIf="idToken">
+      Expired in = {{ idToken.exp - currentTime }} seconds
+    </p>
+    <h4>Plain</h4>
+    <p *ngIf="idTokenString">
+      {{ idTokenString }}
     </p>
     <h4>Base64 Decode</h4>
-    <pre *ngIf="idToken">{{ parseJwt(idToken) | json }}</pre>
+    <pre *ngIf="idToken">{{ idToken | json }}</pre>
     <mat-divider></mat-divider>
     <h2>Access Token</h2>
+    <h4>Expiration</h4>
+    <p *ngIf="accessToken">
+      Total Expiration = {{ (accessToken.exp - accessToken.iat) }} seconds
+    </p>
+    <p *ngIf="accessToken">
+      Expired in = {{ accessToken.exp - currentTime }} seconds
+    </p>
     <h4>Plain</h4>
     <p *ngIf="accessToken">
-      {{ accessToken }}
+      {{ accessTokenString }}
     </p>
     <h4>Base64 Decode</h4>
-    <pre *ngIf="accessToken">{{ parseJwt(accessToken) | json }}</pre>
+    <pre *ngIf="accessToken">{{ accessToken | json }}</pre>
   </mat-card-content>
   <mat-card-actions>
-    <button (click)="renewIdToken()" mat-raised-button color="primary">Renew Id Token</button>
-    <button (click)="renewAccessToken()" mat-raised-button color="primary">Renew Access Token</button>
+    <button (click)="renew()" mat-raised-button color="primary">Renew Token</button>
   </mat-card-actions>
 </mat-card>

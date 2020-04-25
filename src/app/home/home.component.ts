@@ -1,14 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
 import { AppState } from '../state/app.state';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../user/user';
-import { selectCurrentUser, selectSSWS } from '../user/state';
+import { selectCurrentUser } from '../user/state';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { LoadCurrentUser, LoadSSWS } from '../user/state/user.actions';
-import { OidcAuthService } from '../auth/auth.service';
+import { LoadCurrentUser } from '../user/state/user.actions';
 
 @Component({
   selector: 'app-home',
@@ -32,10 +30,9 @@ export class HomeComponent implements OnInit {
   private mobileQueryListener: () => void;
 
   constructor(private router: Router,
-              private store: Store<AppState>,
-              private authService: OidcAuthService,
-              private changeDetectorRef: ChangeDetectorRef,
-              private media: MediaMatcher) { }
+    private store: Store<AppState>,
+    private changeDetectorRef: ChangeDetectorRef,
+    private media: MediaMatcher) { }
 
   ngOnInit() {
     this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
