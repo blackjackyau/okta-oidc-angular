@@ -9,7 +9,6 @@ import { OidcConfigService } from './config.service';
 // http://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#introduction
 // import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import * as oidcClient from 'oidc-client';
-import { resolve } from 'url';
 
 @Injectable({
     providedIn: 'root'
