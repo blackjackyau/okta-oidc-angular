@@ -10,16 +10,16 @@ export class AuthProfilesService {
 
   constructor() { }
 
-  list(): Observable<AuthProfile[]> {
+  list(): AuthProfile[] {
     const authProfiles = localStorage.getItem("authProfiles");
     if (authProfiles) {
-      return of(JSON.parse(authProfiles));  
+      return JSON.parse(authProfiles);  
     } else {
-      of([]);
+      return [];
     }
   }
 
-  save(profiles: AuthProfile[]): Observable<AuthProfile[]> {
+  save(profiles: AuthProfile[]): AuthProfile[] {
     localStorage.setItem("authProfiles", JSON.stringify(profiles));
     return this.list();
   }

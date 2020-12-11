@@ -16,7 +16,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { AppMaterialModule } from './app-material.module';
-import { StoreModule, Store } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -26,6 +26,7 @@ import { CurrentUserEffects, SSWSEffects } from './user/state/user.effect';
 import { AppSharedModule } from './app-shared.module';
 import { OidcConfigService } from './auth/config.service';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
+import { AuthProfilesComponent } from './auth-profiles/auth-profiles.component';
 
 const oktaConfigData = Object.assign({
   onAuthRequired: ({ oktaAuth, router }) => {
@@ -41,6 +42,7 @@ const oktaConfigData = Object.assign({
     LogoutComponent,
     HomeComponent,
     AuthCallbackComponent,
+    AuthProfilesComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,36 @@
+@import '../../styles.scss';
+
+.auth-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.form-full-width {
+    width: 100%;
+}
+
+.fed-idp-form-group {
+    padding-top: 10px;
+}
+
+.fed-idp-form-control {
+    margin-left: 5px;
+    margin-right: 15px;
+    min-width: 150px;
+    max-width: 500px;
+}
+
+.federated-idps-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.federated-idps-header, h3 {
+    margin: 5px;
+    font-size: 20px;
+}
+
+
+// mat-color($app-primary).
