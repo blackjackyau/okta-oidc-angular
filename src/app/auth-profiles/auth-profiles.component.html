@@ -1,0 +1,71 @@
+<div>
+    <p>Add Auth Profile</p>
+    <form [formGroup]="profileForm" class="auth-form">
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Client Id</mat-label>
+            <input matInput placeholder="0oam5zkpp9nqUwpq0356" formControlName="clientId">
+        </mat-form-field>
+
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Issuer</mat-label>
+            <input matInput placeholder="https://dev-875318.okta.com/oauth2/default" formControlName="issuer">
+        </mat-form-field>
+
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Scope</mat-label>
+            <input matInput placeholder="openid profile email" value="openid profile email" formControlName="scope">
+        </mat-form-field>
+    </form>
+
+    <button (click)="addFederatedIdp()">Add Federated IdP entries</button>
+
+    <ng-container [formArrayName]="federatedIdps">
+        <div *ngFor="let control of federatedIdps.controls; index as i">
+            <mat-form-field class="form-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name">
+            </mat-form-field>
+            <mat-form-field class="form-full-width">
+                <mat-label>Id</mat-label>
+                <input matInput formControlName="id">
+            </mat-form-field>
+            <button (click)="removeFederatedIdp(i)">X</button>
+        </div>
+    </ng-container>
+</div>
+
+<!-- https://netbasal.com/angular-reactive-forms-the-ultimate-guide-to-formarray-3adbe6b0b61a -->
+<!-- 
+<form [formGroup]="loginForm" class="login-form">
+    <mat-form-field>
+        <input type="email" matInput placeholder="Username" formControlName="username">
+
+        export interface AuthProfile {
+        oktaUrl: string;
+        oidc: {
+        clientId: string;
+        issuer: string;
+        scope: string;
+        },
+        federatedIdps: FederatedIdP[];
+        };
+
+        export interface FederatedIdP {
+        name: string;
+        id: string;
+        }
+
+        export const environment = {
+        production: true,
+        oktaUrl: 'https://dev-875318.okta.com',
+        oidc: {
+        clientId: '0oam5zkpp9nqUwpq0356',
+        issuer: 'https://dev-875318.okta.com/oauth2/default',
+        redirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page',
+        silentRedirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page',
+        scope: 'openid profile email',
+        responseType: 'code',
+        registerUri: 'https://dev-875318.okta.com/signin/register',
+        postLogoutRedirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page'
+        }
+        }; -->
