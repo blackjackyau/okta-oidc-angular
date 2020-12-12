@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthProfile, FederatedIdP } from './auth-profiles.model';
+import { AuthProfile, AuthProfileData, FederatedIdP } from './auth-profiles.model';
 import { AuthProfilesService } from './auth-profiles.service';
 
 @Component({
@@ -12,15 +12,18 @@ export class AuthProfilesComponent implements OnInit {
 
   profileForm: FormGroup;
   federatedIdps: FormArray;
+  profileData: AuthProfileData;
 
   constructor(private authProfilesService: AuthProfilesService, formBuilder: FormBuilder) {
     this.federatedIdps = new FormArray([]);
     this.profileForm = formBuilder.group({
+      name: ['', Validators.required],
       clientId: ['', Validators.required],
       issuer: ['', Validators.required],
       scope: ['openid profile email', Validators.required],
       federatedIdps: this.federatedIdps
-    });    
+    });
+    this.profileData = this.authProfilesService.getData();
   }
 
   ngOnInit(): void {
@@ -34,11 +37,24 @@ export class AuthProfilesComponent implements OnInit {
     });
 
     this.federatedIdps.push(federatedIdpGroup);
-    $event.stopPropagation();
+    $event.preventDefault(); // do not propagate validation
   }
 
   removeFederatedIdp(index: number) {
     this.federatedIdps.removeAt(index);
+  }
+
+  select(profileIndex: number) {
+    const profileData = this.authProfilesService.getData();
+    profileData.selected = profileIndex;
+    this.authProfilesService.save(profileData);
+  }
+
+  delete(profileIndex: number) {
+    const profileData = this.authProfilesService.getData();
+    profileData.profiles.splice(profileIndex ,1);
+    this.authProfilesService.save(profileData);
+    this.profileData = profileData;
   }
 
   addProfile() {
@@ -47,9 +63,10 @@ export class AuthProfilesComponent implements OnInit {
       for (let value of this.federatedIdps.value) {
           fedIdps.push(value);
      }
-     const profiles = this.authProfilesService.list();
+     const profileData = this.authProfilesService.getData();
       const profile: AuthProfile = {
         oktaUrl: undefined,
+        name: this.profileForm.get("name").value,
         oidc: {
           clientId: this.profileForm.get("clientId").value,
           issuer: this.profileForm.get("issuer").value,
@@ -57,8 +74,11 @@ export class AuthProfilesComponent implements OnInit {
         },
         federatedIdps: fedIdps
       };
-      profiles.push(profile);
-      this.authProfilesService.save(profiles);
+      profileData.profiles.push(profile);
+      this.authProfilesService.save(profileData);
+      this.profileData = this.authProfilesService.getData();
+      this.federatedIdps.clear();
+      this.profileForm.reset();
     }
   }
 

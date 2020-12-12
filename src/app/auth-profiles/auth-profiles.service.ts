@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { AuthProfile } from './auth-profiles.model';
+import { AuthProfileData } from './auth-profiles.model';
 
 
 @Injectable({
@@ -10,17 +9,20 @@ export class AuthProfilesService {
 
   constructor() { }
 
-  list(): AuthProfile[] {
-    const authProfiles = localStorage.getItem("authProfiles");
-    if (authProfiles) {
-      return JSON.parse(authProfiles);  
+  getData(): AuthProfileData {
+    const authProfileData = localStorage.getItem("authProfileData");
+    if (authProfileData) {
+      return JSON.parse(authProfileData);  
     } else {
-      return [];
+      return {
+        selected: undefined,
+        profiles: []
+      };
     }
   }
 
-  save(profiles: AuthProfile[]): AuthProfile[] {
-    localStorage.setItem("authProfiles", JSON.stringify(profiles));
-    return this.list();
+  save(profileData: AuthProfileData): AuthProfileData {
+    localStorage.setItem("authProfileData", JSON.stringify(profileData));
+    return this.getData();
   }
 }

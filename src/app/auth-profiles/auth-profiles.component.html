@@ -1,26 +1,32 @@
 <mat-card>
-    <mat-card-title>Add Auth Profile</mat-card-title>
+    <mat-card-title>Create Auth Profile</mat-card-title>
     <mat-card-content>
         <form [formGroup]="profileForm" class="auth-form">
+            <mat-form-field class="form-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="" formControlName="name">
+            </mat-form-field>
+
             <mat-form-field class="form-full-width">
                 <mat-label>Oidc Client Id</mat-label>
                 <input matInput placeholder="0oam5zkpp9nqUwpq0356" formControlName="clientId">
             </mat-form-field>
-    
+
             <mat-form-field class="form-full-width">
                 <mat-label>Oidc Issuer</mat-label>
                 <input matInput placeholder="https://dev-875318.okta.com/oauth2/default" formControlName="issuer">
             </mat-form-field>
-    
+
             <mat-form-field class="form-full-width">
                 <mat-label>Oidc Scope</mat-label>
                 <input matInput placeholder="openid profile email" formControlName="scope">
             </mat-form-field>
-    
+
             <div class="federated-idps-header">
                 <!-- <h2>Federated IdP Entries</h2> -->
                 <h3>Federated IdP Entries</h3>
-                <button mat-raised-button color="primary" (click)="addFederatedIdp($event)">Add Federated IdP entries</button>
+                <button mat-raised-button color="primary" (click)="addFederatedIdp($event)">Add Federated IdP
+                    entries</button>
             </div>
 
             <ng-container formArrayName="federatedIdps">
@@ -44,13 +50,50 @@
         <button mat-raised-button color="primary" (click)="addProfile()">Add Profiles</button>
     </mat-card-content>
 </mat-card>
-<!-- <div>
-    <div *ngFor="let hero of herolist">
+<div class="profiles-container">
+    <h2>Auth Profiles</h2>
+    <div *ngIf="profileData && profileData.profiles.length === 0">
+        No profile created
+    </div>
+    <div *ngFor="let profile of profileData.profiles; index as pi">
         <mat-expansion-panel>
-         // here you can do whateever you want
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <h4>
+                        {{ profile.name }}
+                    </h4>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="profile-container">
+                <div class="profile-label">Client Id</div>
+                <div>{{ profile.oidc.clientId }}</div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-label">Issuer</div>
+                <div>{{ profile.oidc.issuer }}</div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-label">Scope</div>
+                <div>{{ profile.oidc.scope }}</div>
+            </div>
+            <h4>Federated Idps</h4>
+            <div *ngFor="let federatedIdp of profile.federatedIdps; index as i">
+                <div class="profile-container">
+                    <div class="profile-label">Display Name</div>
+                    <div>{{ federatedIdp.name }}</div>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-label">Id</div>
+                    <div>{{ federatedIdp.id }}</div>
+                </div>
+            </div>
+            <mat-action-row>
+                <button mat-raised-button color="primary" (click)="select(pi)">Select As Profile</button>
+                <button mat-raised-button color="primary" (click)="delete(pi)">Delete Profile</button>
+            </mat-action-row>
         </mat-expansion-panel>
-     </div>
-</div> -->
+    </div>
+</div>
 <!-- <mat-expansion-panel [expanded]="true" disabled hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>

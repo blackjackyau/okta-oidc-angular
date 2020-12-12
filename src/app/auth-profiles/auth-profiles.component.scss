@@ -27,10 +27,29 @@
     justify-content: space-between
 }
 
+.profiles-container {
+    padding: 15px;
+}
+
+.profile-container {
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.profile-label {
+    min-width: 300px;
+    font-weight: bold;
+}
+
 .federated-idps-header, h3 {
     margin: 5px;
     font-size: 20px;
 }
 
+.mat-action-row {
+    place-content: start;
+}
 
 // mat-color($app-primary).
