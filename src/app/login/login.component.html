@@ -8,7 +8,7 @@
       Okta SPA with Custom UI
     </h2>
     <form [formGroup]="loginForm" class="login-form">
-      <mat-form-field >
+      <mat-form-field>
         <input type="email" matInput placeholder="Username" formControlName="username">
       </mat-form-field>
       <mat-form-field>
@@ -17,7 +17,7 @@
       <mat-form-field>
         <input matInput type='password' placeholder="Okta SSWS for Admin" formControlName="ssws">
       </mat-form-field>
-      <div class="buttons">
+      <div>
         <div class="login">
           <button (click)="login()" mat-raised-button color="primary">Log in</button>
         </div>
@@ -27,11 +27,13 @@
         </div>
       </div>
     </form>
-    <p>
-      <button (click)="federatedSAML2Login()" mat-raised-button color="primary">Federated Log in (Dev OKTA) using SAML 2.0</button>
-    </p>
-    <p>
-      <button (click)="federatedOIDCLogin()" mat-raised-button color="primary">Federated Log in (Dev OKTA) using Oidc</button>
-    </p>
+    <ng-container *ngIf="activeAuthProfile">
+      <ng-container *ngFor="let fedIdp of activeAuthProfile.federatedIdps">
+        <div class="login">
+          <button (click)="federatedLogin(fedIdp)" mat-raised-button color="primary" class="federated-button">
+            {{ fedIdp.name }}</button>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </div>

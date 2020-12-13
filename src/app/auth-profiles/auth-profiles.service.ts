@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AuthProfileData } from './auth-profiles.model';
+import { AuthProfile, AuthProfileData } from './auth-profiles.model';
 
 
 @Injectable({
@@ -18,6 +18,16 @@ export class AuthProfilesService {
         selected: undefined,
         profiles: []
       };
+    }
+  }
+
+  getActiveProfile(): AuthProfile {
+    const authProfileData = this.getData();
+    console.log(authProfileData);
+    if (authProfileData.selected !== undefined) {
+      return authProfileData.profiles[authProfileData.selected];
+    } else {
+      return undefined;
     }
   }
 

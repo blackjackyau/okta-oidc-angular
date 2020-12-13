@@ -5,6 +5,8 @@ import { environment } from '../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
 import { OidcAuthService } from '../auth/auth.service';
+import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
+import { AuthProfile, FederatedIdP } from '../auth-profiles/auth-profiles.model';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +19,13 @@ export class LoginComponent implements OnInit {
 
   isSubmitted = false;
 
+  activeAuthProfile: AuthProfile;
+
   constructor(private signInService: OktaSignInService,
               private authService: OidcAuthService,
               private formBuilder: FormBuilder,
-              private store: Store<AppState>) {
+              private authProfilesService: AuthProfilesService) {
+      this.activeAuthProfile = this.authProfilesService.getActiveProfile();
   }
 
   ngOnInit() {
@@ -47,16 +52,9 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  federatedSAML2Login() {
+  federatedLogin(federatedIdp: FederatedIdP) {
     const param = {
-      idp: '0oa2z3gfu5XPR3E0O357'
-    }
-    this.authService.loginWithRedirect(param);
-  }
-
-  federatedOIDCLogin() {
-    const param = {
-      idp: '0oa30v9njcVClHoRj357'
+      idp: federatedIdp.id
     }
     this.authService.loginWithRedirect(param);
   }

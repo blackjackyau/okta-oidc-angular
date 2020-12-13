@@ -1,10 +1,8 @@
 import { OnInitEffects, Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { Injectable } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { SetCurrentUser, UserActionTypes, LoadCurrentUser, SetSSWS, LoadSSWS } from './user.actions';
+import { map } from 'rxjs/operators';
+import { SetCurrentUser, UserActionTypes, SetSSWS, LoadSSWS } from './user.actions';
 import { OidcAuthService } from 'src/app/auth/auth.service';
 
 
@@ -18,9 +16,9 @@ export class CurrentUserEffects {
   loadUser$ = this.actions$.pipe(
     ofType(UserActionTypes.LoadCurrentUser),
     map(() => {
-      const userinfo = this.authService.getCurrentUser();
+      const userinfo = this.authService.getUser();
       if (userinfo) {
-        return new SetCurrentUser({ id: userinfo.id, userName: userinfo.email });
+        return new SetCurrentUser({ id: userinfo.profile.id, userName: userinfo.profile.preferred_username });
       } else {
         return new SetCurrentUser(null);
       }

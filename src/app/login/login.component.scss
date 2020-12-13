@@ -43,16 +43,16 @@ border-radius: 50%;
   color: rgba(0, 0, 0, 0.31);
 }
 
-.buttons .login {
-  padding-top: 2vh;
-  padding-bottom: 2vh;
+.login {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.buttons .login > button {
+.login > button {
   width: 100%;
 }
 
-.buttons .register {
+.register {
   display: flex;
   padding-top: 2vh;
   padding-bottom: 2vh;
