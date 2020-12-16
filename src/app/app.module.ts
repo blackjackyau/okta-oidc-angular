@@ -1,16 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { reducer as userReducer } from './user/state/user.reducer';
-
-import {
-  OKTA_CONFIG,
-  OktaAuthModule,
-} from '@okta/okta-angular';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -28,13 +22,6 @@ import { OidcConfigService } from './auth/config.service';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { AuthProfilesComponent } from './auth-profiles/auth-profiles.component';
 
-const oktaConfigData = Object.assign({
-  onAuthRequired: ({ oktaAuth, router }) => {
-    console.log('here here');
-    router.navigate(['/login']);
-  }
-}, environment.oidc);
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,7 +35,6 @@ const oktaConfigData = Object.assign({
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    OktaAuthModule,
     HttpClientModule,
     BrowserAnimationsModule,
     AppMaterialModule,
@@ -63,7 +49,6 @@ const oktaConfigData = Object.assign({
     EffectsModule.forRoot([CurrentUserEffects, SSWSEffects])
   ],
   providers: [
-    { provide: OKTA_CONFIG, useValue: oktaConfigData },
     { provide: OidcConfigService, useValue: environment.oidc },
     CookieService,
   ],

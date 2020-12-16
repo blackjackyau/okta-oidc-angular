@@ -1,13 +1,17 @@
 <div class="login-page">
+  <div *ngIf="activeAuthProfile" class="mdl-color--accent mdl-color-text--white">
+    {{ activeAuthProfile.name }}
+    <a routerLink="/profiles">Change Profile</a>
+  </div>
   <div class="login-spacer"></div>
   <div class="login-container">
     <div id="login-fab" class="mdl-color--accent mdl-color-text--white">
       <i id="lock-icon" class="material-icons">lock</i>
     </div>
     <h2 class="card-heading">
-      Okta SPA with Custom UI
+      Oidc with PKCE with Okta
     </h2>
-    <form [formGroup]="loginForm" class="login-form">
+    <form *ngIf="supportCustomUILogin" [formGroup]="loginForm" class="login-form">
       <mat-form-field>
         <input type="email" matInput placeholder="Username" formControlName="username">
       </mat-form-field>
@@ -18,20 +22,25 @@
         <input matInput type='password' placeholder="Okta SSWS for Admin" formControlName="ssws">
       </mat-form-field>
       <div>
-        <div class="login">
-          <button (click)="login()" mat-raised-button color="primary">Log in</button>
+        <div class="padding">
+          <button class="login-btn" (click)="customUILogin()" mat-raised-button color="primary">Log in</button>
         </div>
-        <div class="register">
+        <!-- <div class="register">
           <button (click)="register()" mat-raised-button color="primary">Register</button>
           <button mat-button color="primary">Forgot Password</button>
-        </div>
+        </div> -->
       </div>
     </form>
+    <div class="padding">
+      <button class="login-btn" (click)="login()" mat-raised-button color="primary">
+        Login via Application IdP</button>
+    </div>
+    <mat-divider></mat-divider>
     <ng-container *ngIf="activeAuthProfile">
       <ng-container *ngFor="let fedIdp of activeAuthProfile.federatedIdps">
-        <div class="login">
-          <button (click)="federatedLogin(fedIdp)" mat-raised-button color="primary" class="federated-button">
-            {{ fedIdp.name }}</button>
+        <div class="padding">
+          <button class="login-btn" (click)="federatedLogin(fedIdp)" mat-raised-button color="primary">
+            Fed Login via {{ fedIdp.name }}</button>
         </div>
       </ng-container>
     </ng-container>

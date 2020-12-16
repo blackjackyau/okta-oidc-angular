@@ -1,22 +1,16 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { OktaAuthService } from '@okta/okta-angular';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { AppState } from '../state/app.state';
-import { selectSSWS } from '../user/state';
-import { map, tap, switchMap, mergeMap } from 'rxjs/operators';
-import { iif, from } from 'rxjs';
-import { SetCurrentUser, SetSSWS } from '../user/state/user.actions';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminRedirectGuard implements CanActivate {
 
-  constructor(private authService: OktaAuthService,
-              private store: Store<AppState>,
-              private router: Router) {
+  constructor(private router: Router) {
   }
 
   canActivate(

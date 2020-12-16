@@ -17,6 +17,7 @@ export class AuthProfilesComponent implements OnInit {
   constructor(private authProfilesService: AuthProfilesService, formBuilder: FormBuilder) {
     this.federatedIdps = new FormArray([]);
     this.profileForm = formBuilder.group({
+      oktaUrl: ['', Validators.required],
       name: ['', Validators.required],
       clientId: ['', Validators.required],
       issuer: ['', Validators.required],
@@ -44,12 +45,6 @@ export class AuthProfilesComponent implements OnInit {
     this.federatedIdps.removeAt(index);
   }
 
-  select(profileIndex: number) {
-    const profileData = this.authProfilesService.getData();
-    profileData.selected = profileIndex;
-    this.authProfilesService.save(profileData);
-  }
-
   delete(profileIndex: number) {
     const profileData = this.authProfilesService.getData();
     profileData.profiles.splice(profileIndex ,1);
@@ -65,7 +60,7 @@ export class AuthProfilesComponent implements OnInit {
      }
      const profileData = this.authProfilesService.getData();
       const profile: AuthProfile = {
-        oktaUrl: undefined,
+        oktaUrl: this.profileForm.get("oktaUrl").value,
         name: this.profileForm.get("name").value,
         oidc: {
           clientId: this.profileForm.get("clientId").value,

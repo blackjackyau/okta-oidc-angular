@@ -1,3 +1,5 @@
+@import '../../styles.scss';
+
 .login-page {
   height: 100vh;
   width: 100%;
@@ -26,7 +28,7 @@ border-radius: 50%;
   min-width: 56px;
   width: 56px;
   overflow: hidden;
-  background: rgb(63, 81, 181);
+  background: mat-color($app-primary);
   box-shadow: 0 1px 1.5px 0 rgba(0,0,0,.12), 0 1px 1px 0 rgba(0,0,0,.24);
   margin-top: -35px;
   text-align: center;
@@ -38,17 +40,18 @@ border-radius: 50%;
   line-height: 56px;
   color: #fff;
 }
+
 .card-heading {
   text-align: center;
   color: rgba(0, 0, 0, 0.31);
 }
 
-.login {
+.padding {
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
-.login > button {
+.login-btn {
   width: 100%;
 }
 
