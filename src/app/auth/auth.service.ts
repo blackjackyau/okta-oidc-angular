@@ -9,106 +9,83 @@ import { OidcConfigService } from './config.service';
 // http://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#introduction
 // import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import * as oidcClient from 'oidc-client';
+import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class OidcAuthService {
 
-    private authState$ = new BehaviorSubject(false);
+    private authState$ = new BehaviorSubject(undefined);
 
     private authService: oidcClient.UserManager;
 
-    private currentUser: any;
-
-    private idToken = '';
-    private accessToken = '';
-
-    private authenticated = false;
+    private user: oidcClient.User;
 
     constructor(@Inject(OidcConfigService) private config: OidcConfig,
+        private authProfilesService: AuthProfilesService,
         private router: Router) {
 
         console.info('OidcAuthService: constructor()');
 
-        this.currentUser = null;
+        const authProfile = this.authProfilesService.getActiveProfile();
 
-        const oidcConfig: oidcClient.UserManagerSettings = {
-            authority: this.config.issuer,
-            client_id: this.config.clientId,
-            redirect_uri: this.config.redirectUri,
-            post_logout_redirect_uri: this.config.postLogoutRedirectUri,
-            silent_redirect_uri: this.config.silentRedirectUri,
-            includeIdTokenInSilentRenew: true,
-            response_type: this.config.responseType,
-            scope: this.config.scope,
-            filterProtocolClaims: this.config.filterProtocolClaims,
-            loadUserInfo: this.config.loadUserInfo
-        };
+        if (authProfile) {
+            const effectiveOidcConfig = Object.assign({}, this.config, authProfile.oidc);
 
-        this.authService = new oidcClient.UserManager(oidcConfig);
+            const oidcConfig: oidcClient.UserManagerSettings = {
+                authority: effectiveOidcConfig.issuer,
+                client_id: effectiveOidcConfig.clientId,
+                redirect_uri: effectiveOidcConfig.redirectUri,
+                post_logout_redirect_uri: effectiveOidcConfig.postLogoutRedirectUri,
+                silent_redirect_uri: effectiveOidcConfig.silentRedirectUri,
+                includeIdTokenInSilentRenew: true,
+                response_type: effectiveOidcConfig.responseType,
+                scope: effectiveOidcConfig.scope,
+                filterProtocolClaims: effectiveOidcConfig.filterProtocolClaims,
+                loadUserInfo: effectiveOidcConfig.loadUserInfo
+            };
+    
+            this.authState$.subscribe((user: oidcClient.User) => {
+                console.info('OidcAuthService isAuthenticated(): ' + !!this.user);
+    
+                if (user) {
+                    this.user = user;
+                }
+            });
+    
+            console.log(oidcConfig);
+    
+            this.authService = new oidcClient.UserManager(oidcConfig);
+        }
 
-        this.authState$.subscribe((authenticated: boolean) => {
-            console.info('OidcAuthService isAuthenticated(): ' + this.authenticated);
+    }
 
-            this.authenticated = authenticated;
-
-            if (this.authenticated) {
-                this.setAccessToken();
-                console.info('OidcAuthService idToken: ' + this.idToken);
-                console.info('OidcAuthService accessToken: ' + this.accessToken);
+    public async isAuthenticated(): Promise<boolean> {
+        if (this.user) {
+            return Promise.resolve(true);
+        } else {
+            if (!this.authService) {
+                return Promise.resolve(false);
+            } else {
+                return this.authService.getUser().then(user => {
+                    this.authState$.next(user);
+                    return Promise.resolve(!!user);
+                });
             }
-        });
-    }
-
-    public async isAuthenticatedAsync(): Promise<boolean> {
-        console.log(`isAuthenticatedAsync is called`);
-        return this.authService.getUser().then(user => {
-            this.currentUser = user;
-            this.authState$.next(!!user);
-            return Promise.resolve(!!user);
-        })
-    }
-
-    public isAuthenticated(): boolean {
-        return this.authenticated;
+        }
     }
 
     public getAccessToken(): string {
-        return this.accessToken;
+        return this.user.access_token;
     }
 
     public getIdToken(): string {
-        return this.idToken;
+        return this.user.id_token;
     }
 
-    public getCurrentUser(): {
-        id: string;
-        sub: string;
-        username: string;
-        name: string;
-        givenName: string;
-        middleName: string;
-        familyName: string;
-        email: string;
-        emailVerified: string;
-    } {
-        return {
-            id: this.currentUser.profile.sub,
-            sub: this.currentUser.profile.sub,
-            username: this.currentUser.profile.preferred_username,
-            name: this.currentUser.profile.name,
-            givenName: this.currentUser.profile.given_name,
-            middleName: '',
-            familyName: this.currentUser.profile.family_name,
-            email: this.currentUser.profile.email,
-            emailVerified: this.currentUser.profile.email_verified,
-        };
-    }
-
-    private setAccessToken() {
-        this.idToken = this.currentUser.id_token;
-        this.accessToken = this.currentUser.access_token;
+    public getUser(): oidcClient.User {
+        return this.user;
     }
 
     public async loginWithRedirect(param?: any): Promise<void> {
@@ -131,13 +108,9 @@ export class OidcAuthService {
 
         console.info('OidcAuthService: handleRedirectCallback()');
 
-        this.currentUser = await this.authService.signinRedirectCallback();
+        const user = await this.authService.signinRedirectCallback();
 
-        console.info('currentUser: ' + JSON.stringify(this.currentUser, null, 2));
-
-        this.authenticated = await this._isAuthenticated();
-
-        this.authState$.next(this.authenticated);
+        this.authState$.next(user);
 
         this.router.navigate(['/']);
     }
@@ -153,19 +126,9 @@ export class OidcAuthService {
     }
 
     public async renew() {
-        this.currentUser = await this.authService.signinSilent();
+        this.user = await this.authService.signinSilent();
         console.log(`token renew`);
-        console.log(this.currentUser);
-        this.authState$.next(!!this.currentUser);
-    }
-
-    //
-    // Private methods
-    //
-
-    private async _isAuthenticated(): Promise<boolean> {
-
-        return this.currentUser !== null && !this.currentUser.expired;
+        this.authState$.next(this.user);
     }
 
 }

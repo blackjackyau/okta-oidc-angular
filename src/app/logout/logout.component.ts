@@ -1,11 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { OktaAuthService } from '@okta/okta-angular';
-import { from } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState } from '../state/app.state';
-import { RemoveCurrentUser } from '../user/state/user.actions';
-import { finalize } from 'rxjs/operators';
-import { Router } from '@angular/router';
 import { OidcAuthService } from '../auth/auth.service';
 
 @Component({
@@ -15,8 +8,7 @@ import { OidcAuthService } from '../auth/auth.service';
 })
 export class LogoutComponent implements OnInit {
 
-  constructor(private authService: OidcAuthService,
-              private store: Store<AppState>, private router: Router) { }
+  constructor(private authService: OidcAuthService) { }
 
   ngOnInit() {
     localStorage.removeItem('okta-ssws');

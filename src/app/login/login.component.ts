@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { OktaSignInService } from '../okta/okta-sign-in.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
-import { Store } from '@ngrx/store';
-import { AppState } from '../state/app.state';
 import { OidcAuthService } from '../auth/auth.service';
+import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
+import { AuthProfile, FederatedIdP } from '../auth-profiles/auth-profiles.model';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +17,18 @@ export class LoginComponent implements OnInit {
 
   isSubmitted = false;
 
+  activeAuthProfile: AuthProfile;
+
+  supportCustomUILogin = false;
+
   constructor(private signInService: OktaSignInService,
-              private authService: OidcAuthService,
-              private formBuilder: FormBuilder,
-              private store: Store<AppState>) {
+    private authService: OidcAuthService,
+    private formBuilder: FormBuilder,
+    private authProfilesService: AuthProfilesService) {
+    this.activeAuthProfile = this.authProfilesService.getActiveProfile();
+    if (this.activeAuthProfile) {
+      this.supportCustomUILogin = !!this.activeAuthProfile.oktaUrl;
+    }
   }
 
   ngOnInit() {
@@ -31,7 +39,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login() {
+  customUILogin() {
     if (this.loginForm.invalid) {
       return;
     }
@@ -47,16 +55,13 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  federatedSAML2Login() {
-    const param = {
-      idp: '0oa2z3gfu5XPR3E0O357'
-    }
-    this.authService.loginWithRedirect(param);
+  login() {
+    this.authService.loginWithRedirect();
   }
 
-  federatedOIDCLogin() {
+  federatedLogin(federatedIdp: FederatedIdP) {
     const param = {
-      idp: '0oa30v9njcVClHoRj357'
+      idp: federatedIdp.id
     }
     this.authService.loginWithRedirect(param);
   }

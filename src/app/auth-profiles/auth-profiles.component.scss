@@ -1,0 +1,64 @@
+@import '../../styles.scss';
+
+.auth-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.profile-header {
+    vertical-align: middle;
+    padding-left: 10px;
+}
+
+.form-full-width {
+    width: 100%;
+}
+
+.fed-idp-form-group {
+    padding-top: 10px;
+}
+
+.fed-idp-form-control {
+    margin-left: 5px;
+    margin-right: 15px;
+    min-width: 150px;
+    max-width: 500px;
+}
+
+.federated-idps-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between
+}
+
+.profiles-container {
+    padding: 15px;
+}
+
+.profile-container {
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.profile-label {
+    min-width: 300px;
+    font-weight: bold;
+}
+
+.federated-idps-header, h3 {
+    margin: 5px;
+    font-size: 20px;
+}
+
+.mat-action-row {
+    place-content: start;
+}
+
+.activeProfile {
+    color: mat-color($app-primary);
+}
+
+// mat-color($app-primary).

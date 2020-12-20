@@ -1,0 +1,184 @@
+<mat-card>
+    <mat-card-title>
+        <a mat-raised-button color="primary" routerLink="/login" matTooltip="To Login Page">
+            <mat-icon>arrow_back</mat-icon>
+        </a>
+        <span class="profile-header">Create Auth Profile</span></mat-card-title>
+    <mat-card-content>
+        <form [formGroup]="profileForm" class="auth-form">
+            <mat-form-field class="form-full-width">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="" formControlName="name">
+            </mat-form-field>
+
+            <mat-form-field class="form-full-width">
+                <mat-label>Oidc Client Id</mat-label>
+                <input matInput placeholder="0oam5zkpp9nqUwpq0356" formControlName="clientId">
+            </mat-form-field>
+
+            <mat-form-field class="form-full-width">
+                <mat-label>Oidc Issuer</mat-label>
+                <input matInput placeholder="https://dev-875318.okta.com/oauth2/default" formControlName="issuer">
+            </mat-form-field>
+
+            <mat-form-field class="form-full-width">
+                <mat-label>Oidc Scope</mat-label>
+                <input matInput placeholder="openid profile email" formControlName="scope">
+            </mat-form-field>
+
+            <mat-form-field class="form-full-width">
+                <mat-label>Okta url (Optional)</mat-label>
+                <input matInput placeholder="https://dev-875318.okta.com/api/v1/authn" formControlName="oktaUrl">
+                <mat-hint>For custom login form</mat-hint>
+            </mat-form-field>
+
+            <div class="federated-idps-header">
+                <!-- <h2>Federated IdP Entries</h2> -->
+                <h3>Federated IdP Entries</h3>
+                <button mat-raised-button color="primary" (click)="addFederatedIdp($event)">Add Federated IdP
+                    entries</button>
+            </div>
+
+            <ng-container formArrayName="federatedIdps">
+                <div *ngFor="let control of federatedIdps.controls; index as i" class="fed-idp-form-group">
+                    <ng-container [formGroupName]="i">
+                        <mat-form-field class="fed-idp-form-control">
+                            <mat-label>Display Name</mat-label>
+                            <input matInput formControlName="name">
+                        </mat-form-field>
+                        <mat-form-field class="fed-idp-form-control">
+                            <mat-label>Id</mat-label>
+                            <input matInput formControlName="id">
+                        </mat-form-field>
+                        <button mat-raised-button (click)="removeFederatedIdp(i)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </form>
+        <button mat-raised-button color="primary" (click)="addProfile()">Add Profiles</button>
+    </mat-card-content>
+</mat-card>
+<div class="profiles-container">
+    <h2>Auth Profiles</h2>
+    <div *ngIf="!profileData.selected"><mat-icon color="warn" inline="true">warning</mat-icon>No Profile Selected</div>
+    <div *ngIf="profileData && profileData.profiles.length === 0">
+        No profile created
+    </div>
+    <div *ngFor="let profile of profileData.profiles; index as pi">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <h4 [class.activeProfile]="profileData.selected === profile.id">
+                        {{ profile.name }} {{ profileData.selected === profile.id ? '(Active)': '' }}
+                    </h4>
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="profile-container">
+                <div class="profile-label">Client Id</div>
+                <div>{{ profile.oidc.clientId }}</div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-label">Issuer</div>
+                <div>{{ profile.oidc.issuer }}</div>
+            </div>
+            <div class="profile-container">
+                <div class="profile-label">Scope</div>
+                <div>{{ profile.oidc.scope }}</div>
+            </div>
+            <h4>Federated Idps</h4>
+            <div *ngFor="let federatedIdp of profile.federatedIdps; index as i">
+                <div class="profile-container">
+                    <div class="profile-label">Display Name</div>
+                    <div>{{ federatedIdp.name }}</div>
+                </div>
+                <div class="profile-container">
+                    <div class="profile-label">Id</div>
+                    <div>{{ federatedIdp.id }}</div>
+                </div>
+            </div>
+            <mat-action-row>
+                <button mat-raised-button color="primary" (click)="select(profile)">Select As Profile</button>
+                <button mat-raised-button color="primary" (click)="delete(pi, profile)">Delete Profile</button>
+            </mat-action-row>
+        </mat-expansion-panel>
+    </div>
+</div>
+<!-- <mat-expansion-panel [expanded]="true" disabled hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Add Auth Profile
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <form [formGroup]="profileForm" class="auth-form">
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Client Id</mat-label>
+            <input matInput placeholder="0oam5zkpp9nqUwpq0356" formControlName="clientId">
+        </mat-form-field>
+
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Issuer</mat-label>
+            <input matInput placeholder="https://dev-875318.okta.com/oauth2/default" formControlName="issuer">
+        </mat-form-field>
+
+        <mat-form-field class="form-full-width">
+            <mat-label>Oidc Scope</mat-label>
+            <input matInput placeholder="openid profile email" formControlName="scope">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="addFederatedIdp()">Add Federated IdP entries</button>
+
+        <ng-container formArrayName="federatedIdps">
+            <div *ngFor="let control of federatedIdps.controls; index as i">
+                <ng-container [formGroupName]="i">
+                    <mat-form-field>
+                        <mat-label>Name</mat-label>
+                        <input matInput formControlName="name">
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Id</mat-label>
+                        <input matInput formControlName="id">
+                    </mat-form-field>
+                    <button mat-raised-button (click)="removeFederatedIdp(i)">X</button>
+                </ng-container>
+            </div>
+        </ng-container>
+    </form>
+</mat-expansion-panel> -->
+
+<!-- https://netbasal.com/angular-reactive-forms-the-ultimate-guide-to-formarray-3adbe6b0b61a -->
+<!-- 
+<form [formGroup]="loginForm" class="login-form">
+    <mat-form-field>
+        <input type="email" matInput placeholder="Username" formControlName="username">
+
+        export interface AuthProfile {
+        oktaUrl: string;
+        oidc: {
+        clientId: string;
+        issuer: string;
+        scope: string;
+        },
+        federatedIdps: FederatedIdP[];
+        };
+
+        export interface FederatedIdP {
+        name: string;
+        id: string;
+        }
+
+        export const environment = {
+        production: true,
+        oktaUrl: 'https://dev-875318.okta.com',
+        oidc: {
+        clientId: '0oam5zkpp9nqUwpq0356',
+        issuer: 'https://dev-875318.okta.com/oauth2/default',
+        redirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page',
+        silentRedirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page',
+        scope: 'openid profile email',
+        responseType: 'code',
+        registerUri: 'https://dev-875318.okta.com/signin/register',
+        postLogoutRedirectUri: 'https://blackjackyau.github.io/okta-oidc-angular-page'
+        }
+        }; -->

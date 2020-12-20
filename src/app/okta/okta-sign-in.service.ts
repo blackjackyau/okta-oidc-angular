@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { OktaAuthService } from '@okta/okta-angular';
+import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
 
 
 @Injectable({
@@ -10,13 +10,11 @@ import { OktaAuthService } from '@okta/okta-angular';
 })
 export class OktaSignInService {
 
-  readonly oktaUrl = 'https://dev-875318.okta.com/api/v1/authn';
-
   constructor(private http: HttpClient,
-              private authService: OktaAuthService) { }
+              private authProfileService: AuthProfilesService) { }
 
   signIn({ username, password }): Observable<any> {
-    return this.http.post<any>(this.oktaUrl, {
+    return this.http.post<any>(`${this.authProfileService.getActiveProfile().oktaUrl}/api/v1/authn`, {
       username, password, options: {
         warnBeforePasswordExpired: true,
         multiOptionalFactorEnroll: false
