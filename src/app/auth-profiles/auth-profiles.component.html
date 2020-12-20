@@ -87,6 +87,10 @@
                 <div class="profile-label">Scope</div>
                 <div>{{ profile.oidc.scope }}</div>
             </div>
+            <div *ngIf="profile.oktaUrl" class="profile-container">
+                <div class="profile-label">Okta url</div>
+                <div>{{ profile.oktaUrl }}</div>
+            </div>
             <h4>Federated Idps</h4>
             <div *ngFor="let federatedIdp of profile.federatedIdps; index as i">
                 <div class="profile-container">
