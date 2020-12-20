@@ -1,9 +1,10 @@
 export interface AuthProfileData {
   profiles: AuthProfile[];
-  selected: number;
+  selected: string;
 };
 
 export interface AuthProfile {
+  id: string;
   name: string;
   oktaUrl: string;
   oidc: {

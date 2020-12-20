@@ -24,7 +24,10 @@ export class AuthProfilesService {
   getActiveProfile(): AuthProfile {
     const authProfileData = this.getData();
     if (authProfileData.selected !== undefined) {
-      return authProfileData.profiles[authProfileData.selected];
+      const selectedProfile = authProfileData.profiles.find((profile) => {
+        return profile.id === authProfileData.selected;
+      });
+      return selectedProfile;
     } else {
       return undefined;
     }

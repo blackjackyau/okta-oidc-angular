@@ -9,7 +9,6 @@ import { OidcConfigService } from './config.service';
 // http://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#introduction
 // import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import * as oidcClient from 'oidc-client';
-import { AuthProfile } from '../auth-profiles/auth-profiles.model';
 import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
 
 @Injectable({
@@ -31,34 +30,35 @@ export class OidcAuthService {
 
         const authProfile = this.authProfilesService.getActiveProfile();
 
-        const effectiveOidcConfig = Object.assign({}, this.config, authProfile.oidc);
+        if (authProfile) {
+            const effectiveOidcConfig = Object.assign({}, this.config, authProfile.oidc);
 
-        this.user = null;
+            const oidcConfig: oidcClient.UserManagerSettings = {
+                authority: effectiveOidcConfig.issuer,
+                client_id: effectiveOidcConfig.clientId,
+                redirect_uri: effectiveOidcConfig.redirectUri,
+                post_logout_redirect_uri: effectiveOidcConfig.postLogoutRedirectUri,
+                silent_redirect_uri: effectiveOidcConfig.silentRedirectUri,
+                includeIdTokenInSilentRenew: true,
+                response_type: effectiveOidcConfig.responseType,
+                scope: effectiveOidcConfig.scope,
+                filterProtocolClaims: effectiveOidcConfig.filterProtocolClaims,
+                loadUserInfo: effectiveOidcConfig.loadUserInfo
+            };
+    
+            this.authState$.subscribe((user: oidcClient.User) => {
+                console.info('OidcAuthService isAuthenticated(): ' + !!this.user);
+    
+                if (user) {
+                    this.user = user;
+                }
+            });
+    
+            console.log(oidcConfig);
+    
+            this.authService = new oidcClient.UserManager(oidcConfig);
+        }
 
-        const oidcConfig: oidcClient.UserManagerSettings = {
-            authority: effectiveOidcConfig.issuer,
-            client_id: effectiveOidcConfig.clientId,
-            redirect_uri: effectiveOidcConfig.redirectUri,
-            post_logout_redirect_uri: effectiveOidcConfig.postLogoutRedirectUri,
-            silent_redirect_uri: effectiveOidcConfig.silentRedirectUri,
-            includeIdTokenInSilentRenew: true,
-            response_type: effectiveOidcConfig.responseType,
-            scope: effectiveOidcConfig.scope,
-            filterProtocolClaims: effectiveOidcConfig.filterProtocolClaims,
-            loadUserInfo: effectiveOidcConfig.loadUserInfo
-        };
-
-        this.authState$.subscribe((user: oidcClient.User) => {
-            console.info('OidcAuthService isAuthenticated(): ' + !!this.user);
-
-            if (user) {
-                this.user = user;
-            }
-        });
-
-        console.log(oidcConfig);
-
-        this.authService = new oidcClient.UserManager(oidcConfig);
     }
 
     public async isAuthenticated(): Promise<boolean> {

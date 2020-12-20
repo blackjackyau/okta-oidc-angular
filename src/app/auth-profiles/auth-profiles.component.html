@@ -1,5 +1,9 @@
 <mat-card>
-    <mat-card-title>Create Auth Profile</mat-card-title>
+    <mat-card-title>
+        <a mat-raised-button color="primary" routerLink="/login" matTooltip="To Login Page">
+            <mat-icon>arrow_back</mat-icon>
+        </a>
+        <span class="profile-header">Create Auth Profile</span></mat-card-title>
     <mat-card-content>
         <form [formGroup]="profileForm" class="auth-form">
             <mat-form-field class="form-full-width">
@@ -23,7 +27,7 @@
             </mat-form-field>
 
             <mat-form-field class="form-full-width">
-                <mat-label>Okta url</mat-label>
+                <mat-label>Okta url (Optional)</mat-label>
                 <input matInput placeholder="https://dev-875318.okta.com/api/v1/authn" formControlName="oktaUrl">
                 <mat-hint>For custom login form</mat-hint>
             </mat-form-field>
@@ -58,6 +62,7 @@
 </mat-card>
 <div class="profiles-container">
     <h2>Auth Profiles</h2>
+    <div *ngIf="!profileData.selected"><mat-icon color="warn" inline="true">warning</mat-icon>No Profile Selected</div>
     <div *ngIf="profileData && profileData.profiles.length === 0">
         No profile created
     </div>
@@ -65,8 +70,8 @@
         <mat-expansion-panel>
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <h4>
-                        {{ profile.name }}
+                    <h4 [class.activeProfile]="profileData.selected === profile.id">
+                        {{ profile.name }} {{ profileData.selected === profile.id ? '(Active)': '' }}
                     </h4>
                 </mat-panel-title>
             </mat-expansion-panel-header>
@@ -94,8 +99,8 @@
                 </div>
             </div>
             <mat-action-row>
-                <button mat-raised-button color="primary" (click)="select(pi)">Select As Profile</button>
-                <button mat-raised-button color="primary" (click)="delete(pi)">Delete Profile</button>
+                <button mat-raised-button color="primary" (click)="select(profile)">Select As Profile</button>
+                <button mat-raised-button color="primary" (click)="delete(pi, profile)">Delete Profile</button>
             </mat-action-row>
         </mat-expansion-panel>
     </div>

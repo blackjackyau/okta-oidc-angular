@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authProfilesService: AuthProfilesService) {
     this.activeAuthProfile = this.authProfilesService.getActiveProfile();
-    this.supportCustomUILogin = !!this.activeAuthProfile.oktaUrl;
+    if (this.activeAuthProfile) {
+      this.supportCustomUILogin = !!this.activeAuthProfile.oktaUrl;
+    }
   }
 
   ngOnInit() {

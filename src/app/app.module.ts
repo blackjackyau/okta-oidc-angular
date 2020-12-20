@@ -21,6 +21,7 @@ import { AppSharedModule } from './app-shared.module';
 import { OidcConfigService } from './auth/config.service';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { AuthProfilesComponent } from './auth-profiles/auth-profiles.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { AuthProfilesComponent } from './auth-profiles/auth-profiles.component';
     HomeComponent,
     AuthCallbackComponent,
     AuthProfilesComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

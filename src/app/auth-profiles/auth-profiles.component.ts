@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { AuthProfile, AuthProfileData, FederatedIdP } from './auth-profiles.model';
 import { AuthProfilesService } from './auth-profiles.service';
 
@@ -14,10 +16,11 @@ export class AuthProfilesComponent implements OnInit {
   federatedIdps: FormArray;
   profileData: AuthProfileData;
 
-  constructor(private authProfilesService: AuthProfilesService, formBuilder: FormBuilder) {
+  constructor(private authProfilesService: AuthProfilesService, formBuilder: FormBuilder,
+    public dialog: MatDialog) {
     this.federatedIdps = new FormArray([]);
     this.profileForm = formBuilder.group({
-      oktaUrl: ['', Validators.required],
+      oktaUrl: [''],
       name: ['', Validators.required],
       clientId: ['', Validators.required],
       issuer: ['', Validators.required],
@@ -28,7 +31,7 @@ export class AuthProfilesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   addFederatedIdp($event) {
@@ -45,21 +48,44 @@ export class AuthProfilesComponent implements OnInit {
     this.federatedIdps.removeAt(index);
   }
 
-  delete(profileIndex: number) {
-    const profileData = this.authProfilesService.getData();
-    profileData.profiles.splice(profileIndex ,1);
-    this.authProfilesService.save(profileData);
-    this.profileData = profileData;
+  select(authProfile: AuthProfile) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: {title: "Confirmation", body: "Select this profile ?", callback: ()=> {
+        const profileData = this.authProfilesService.getData();
+        profileData.selected = authProfile.id;
+        this.authProfilesService.save(profileData);
+        this.profileData = profileData;
+        dialogRef.close();
+      }}
+    });
+  }
+
+  delete(profileIndex: number, authProfile: AuthProfile) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: {title: "Confirmation", body: "Delete this profile ?", callback: ()=> {
+        const profileData = this.authProfilesService.getData();
+        profileData.profiles.splice(profileIndex, 1);
+        if (authProfile.id === profileData.selected) {
+          profileData.selected = undefined;
+        }
+        this.authProfilesService.save(profileData);
+        this.profileData = profileData;
+        dialogRef.close();
+      }}
+    });
   }
 
   addProfile() {
     if (this.profileForm.valid) {
       const fedIdps: FederatedIdP[] = [];
       for (let value of this.federatedIdps.value) {
-          fedIdps.push(value);
-     }
-     const profileData = this.authProfilesService.getData();
+        fedIdps.push(value);
+      }
+      const profileData = this.authProfilesService.getData();
       const profile: AuthProfile = {
+        id: this.uuidv4(),
         oktaUrl: this.profileForm.get("oktaUrl").value,
         name: this.profileForm.get("name").value,
         oidc: {
@@ -77,6 +103,12 @@ export class AuthProfilesComponent implements OnInit {
     }
   }
 
+  private uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
 
 
 

@@ -22,7 +22,7 @@
 }
 
 #login-fab {
-border-radius: 50%;
+  border-radius: 50%;
   height: 56px;
   margin: auto;
   min-width: 56px;
@@ -60,4 +60,10 @@ border-radius: 50%;
   padding-top: 2vh;
   padding-bottom: 2vh;
   justify-content: space-between;
+}
+
+.center-align {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

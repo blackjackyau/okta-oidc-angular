@@ -1,4 +1,4 @@
-<div class="login-page">
+<div *ngIf="activeAuthProfile" class="login-page">
   <div *ngIf="activeAuthProfile" class="mdl-color--accent mdl-color-text--white">
     {{ activeAuthProfile.name }}
     <a routerLink="/profiles">Change Profile</a>
@@ -45,4 +45,16 @@
       </ng-container>
     </ng-container>
   </div>
+</div>
+<div *ngIf="!activeAuthProfile" class="login-page center-align">
+  <mat-card>
+    <mat-card-content>
+      <h2>
+        No Active Profile, Please setup or select a profile
+      </h2>
+    </mat-card-content>
+    <mat-card-actions class="center-align">
+      <a mat-raised-button color="primary" routerLink="/profiles">Go to Profile Page</a>
+    </mat-card-actions>
+  </mat-card>
 </div>
