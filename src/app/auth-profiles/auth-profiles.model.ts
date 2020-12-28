@@ -12,6 +12,7 @@ export interface AuthProfile {
     issuer: string;
     scope: string;
   },
+  fedIdPKey: string;
   federatedIdps: FederatedIdP[];
 };
 

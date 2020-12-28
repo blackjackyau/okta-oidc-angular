@@ -25,6 +25,7 @@ export class AuthProfilesComponent implements OnInit {
       clientId: ['', Validators.required],
       issuer: ['', Validators.required],
       scope: ['openid profile email', Validators.required],
+      fedIdPKey: ['idp', Validators.required],
       federatedIdps: this.federatedIdps
     });
     this.profileData = this.authProfilesService.getData();
@@ -93,13 +94,14 @@ export class AuthProfilesComponent implements OnInit {
           issuer: this.profileForm.get("issuer").value,
           scope: this.profileForm.get("scope").value,
         },
+        fedIdPKey: this.profileForm.get("fedIdPKey").value,
         federatedIdps: fedIdps
       };
       profileData.profiles.push(profile);
       this.authProfilesService.save(profileData);
       this.profileData = this.authProfilesService.getData();
       this.federatedIdps.clear();
-      this.profileForm.reset();
+      this.profileForm.reset({ scope: "openid profile email", fedIdPKey: "idp" });
     }
   }
 
