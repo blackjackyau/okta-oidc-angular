@@ -3,6 +3,10 @@
 # OktaOidcAngular
 Single Page Application type of OIDC flow (Public Client with Auth Code PKCE) with OKTA as IdP
 
+## Hosted environment
+- git repo [(link)](https://github.com/blackjackyau/okta-oidc-angular-page)
+- git page [(link)](https://blackjackyau.github.io/okta-oidc-angular-page/)
+
 ## Features
 - multiple auth profiles for different IdP testings
 - Support custom login page instead of IdP login page (OKTA only)
