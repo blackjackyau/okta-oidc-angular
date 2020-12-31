@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Observable, from, iif, of } from 'rxjs';
-import { AppState } from '../state/app.state';
+import { Observable, from, of } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { mergeMap, map, tap, switchMap } from 'rxjs/operators';
-import { OidcAuthService } from '../auth/auth.service';
+import * as fromRoot from '../reducers'
+import { tap, switchMap } from 'rxjs/operators';
+import { OidcAuthService } from '../auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ import { OidcAuthService } from '../auth/auth.service';
 export class LoginGuard implements CanActivate {
 
   constructor(private authService: OidcAuthService,
-    private store: Store<AppState>,
+    private store: Store<fromRoot.State>,
     private router: Router) {
   }
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
-import { OidcAuthService } from '../auth/auth.service';
+import { OidcAuthService } from '../auth/services/auth.service';
 
 @Component({
   selector: 'app-key-mgmt',

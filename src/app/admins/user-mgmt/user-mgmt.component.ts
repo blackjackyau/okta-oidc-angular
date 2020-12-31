@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { User } from '../../user/user';
-import { AppState } from '../../state/app.state';
+import { User } from '../../auth/models/user';
 import { Store, select } from '@ngrx/store';
+import * as fromRoot from '../../reducers'
 import { LoadUsers } from './state/user-mgmt.actions';
 import { selectUsers } from './state';
 
@@ -15,7 +15,7 @@ export class UserMgmtComponent implements OnInit {
 
   users$: Observable<User[]>;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
     this.store.dispatch(new LoadUsers());

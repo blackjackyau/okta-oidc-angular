@@ -9,7 +9,7 @@ import { OidcConfigService } from './config.service';
 // http://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#introduction
 // import { UserManager, UserManagerSettings, User } from 'oidc-client';
 import * as oidcClient from 'oidc-client';
-import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
+import { AuthProfilesService } from '../../auth-profiles/auth-profiles.service';
 
 @Injectable({
     providedIn: 'root'

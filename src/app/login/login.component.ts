@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OktaSignInService } from '../okta/okta-sign-in.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '../../environments/environment';
-import { OidcAuthService } from '../auth/auth.service';
+import { OidcAuthService } from '../auth/services/auth.service';
 import { AuthProfilesService } from '../auth-profiles/auth-profiles.service';
 import { AuthProfile, FederatedIdP } from '../auth-profiles/auth-profiles.model';
 

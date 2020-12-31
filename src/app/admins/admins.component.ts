@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { AppState } from '../state/app.state';
+import * as fromRoot from '../reducers'
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { User } from '../user/user';
-import { selectCurrentUser } from '../user/state';
+import { User } from '../auth/models/user';
+import { selectCurrentUser } from '../auth/reducers/auth.reducer';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { LoadCurrentUser, LoadSSWS } from '../user/state/user.actions';
+import { SessionActions } from '../auth/actions'
 
 @Component({
   selector: 'app-admins',
@@ -35,7 +35,7 @@ export class AdminsComponent implements OnInit {
   private mobileQueryListener: () => void;
 
   constructor(private router: Router,
-              private store: Store<AppState>,
+              private store: Store<fromRoot.State>,
               private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher) { }
 
@@ -46,8 +46,7 @@ export class AdminsComponent implements OnInit {
     };
     this.mobileQuery.addListener(this.mobileQueryListener);
 
-    this.store.dispatch(new LoadCurrentUser());
-    this.store.dispatch(new LoadSSWS());
+    this.store.dispatch(SessionActions.loadSession());
     this.currentUser$ = this.store.pipe(select(selectCurrentUser));
   }
 

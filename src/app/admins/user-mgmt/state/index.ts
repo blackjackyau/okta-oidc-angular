@@ -1,4 +1,4 @@
-import { User } from '../../../user/user';
+import { User } from '../../../auth/models/user';
 
 import { createSelector, createFeatureSelector } from '@ngrx/store';
 
