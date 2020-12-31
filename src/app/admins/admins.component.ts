@@ -35,9 +35,9 @@ export class AdminsComponent implements OnInit {
   private mobileQueryListener: () => void;
 
   constructor(private router: Router,
-              private store: Store<fromRoot.State>,
-              private changeDetectorRef: ChangeDetectorRef,
-              private media: MediaMatcher) { }
+    private store: Store<fromRoot.State>,
+    private changeDetectorRef: ChangeDetectorRef,
+    private media: MediaMatcher) { }
 
   ngOnInit() {
     this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
@@ -51,7 +51,7 @@ export class AdminsComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['logout']);
+    this.store.dispatch(SessionActions.logoutSession());
   }
 
   renew() {

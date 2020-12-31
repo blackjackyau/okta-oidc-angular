@@ -14,20 +14,18 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { LogoutComponent } from './logout/logout.component';
 import { AppSharedModule } from './app-shared.module';
 import { OidcConfigService } from './auth/services/config.service';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { AuthProfilesComponent } from './auth-profiles/auth-profiles.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 import { ROOT_REDUCERS, metaReducers } from './reducers';
-import { SessionEffects } from './auth/effects/user.effects';
+import { SessionEffects } from './auth/effects/auth.effects';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    LogoutComponent,
     HomeComponent,
     AuthCallbackComponent,
     AuthProfilesComponent,

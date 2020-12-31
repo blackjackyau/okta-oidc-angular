@@ -4,7 +4,6 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { LoggedInGuard } from './guards/logged-in.guard';
 import { LoginGuard } from './guards/login.guard';
-import { LogoutComponent } from './logout/logout.component';
 import { FragmentGuard } from './guards/fragment.guard';
 import { AdminRedirectGuard } from './guards/admin-redirect.guard';
 import { KeyMgmtComponent } from './key-mgmt/key-mgmt.component';
@@ -18,7 +17,6 @@ const routes: Routes = [
   { path: '', component: AuthCallbackComponent, canActivate: [FragmentGuard], runGuardsAndResolvers: 'always' },
   { path: 'profiles', component: AuthProfilesComponent },
   { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
-  { path: 'logout', component: LogoutComponent },
   {
     path: 'home', component: HomeComponent, canActivate: [LoggedInGuard, AdminRedirectGuard],
     children: [

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { OidcAuthService } from 'src/app/auth/services/auth.service';
 import { SessionActions } from '../actions';
+import { dispatch } from 'rxjs/internal/observable/pairs';
 
 
 @Injectable()
@@ -23,6 +24,15 @@ export class SessionEffects {
       } else {
         return SessionActions.setSession({ user: undefined, ssws: undefined });
       }
+    })
+  );
+
+  @Effect({ dispatch: false })
+  logoutSession$ = this.actions$.pipe(
+    ofType(SessionActions.logoutSession),
+    map(() => {
+      localStorage.removeItem('okta-ssws');
+      this.authService.logout();
     })
   );
 

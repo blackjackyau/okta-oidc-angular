@@ -17,7 +17,7 @@ export const initialState: State = {
 export const reducer = createReducer(
     initialState,
     on(SessionActions.setSession, (state, { user, ssws }) => ({ currentUser: user, sswsToken: ssws })),
-    on(SessionActions.removeSession, () => initialState)
+    on(SessionActions.logoutSession, () => initialState)
 );
 
 const selectAuthState = createFeatureSelector<State>(

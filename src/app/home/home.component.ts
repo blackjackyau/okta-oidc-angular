@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
   }
 
   logout() {
-    this.router.navigate(['logout']);
+    this.store.dispatch(SessionActions.logoutSession());
   }
 
   OnDestroy(): void {
