@@ -1,4 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../reducers';
+import * as fromAuth from '../auth/reducers/auth.reducer';
+import { SessionActions } from '../auth/actions';
 import { OidcAuthService } from '../auth/services/auth.service';
 
 @Component({
@@ -16,11 +20,24 @@ export class KeyMgmtComponent implements OnInit {
 
   currentTime = Math.trunc(Date.now() / 1000);
 
-  constructor(private authService: OidcAuthService, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private authService: OidcAuthService, private changeDetectorRef: ChangeDetectorRef,
+     private store: Store<fromRoot.State>) {
   }
 
   ngOnInit() {
-    this.reloadView();
+    this.store.select(fromAuth.selectTokens).subscribe(tokens => {
+      if (tokens) {
+        this.accessTokenString = tokens.accessToken;
+        this.accessToken = this.parseJwt(this.accessTokenString);
+        this.idTokenString = tokens.idToken;
+        this.idToken = this.parseJwt(this.idTokenString);
+      } else {
+        this.accessTokenString = undefined;
+        this.accessToken = undefined;
+        this.idTokenString = undefined;
+        this.idToken = undefined;
+      }
+    });
   }
 
   reloadView() {
@@ -41,9 +58,10 @@ export class KeyMgmtComponent implements OnInit {
   };
 
   renew() {
-    this.authService.renew().then(() => {
+    this.authService.renew().then(user => {
       this.reloadView();
     });
+    //this.store.dispatch(SessionActions.renewSession());
   }
 }
 

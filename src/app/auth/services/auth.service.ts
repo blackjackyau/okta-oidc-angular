@@ -45,17 +45,16 @@ export class OidcAuthService {
                 filterProtocolClaims: effectiveOidcConfig.filterProtocolClaims,
                 loadUserInfo: effectiveOidcConfig.loadUserInfo
             };
-    
+
             this.authState$.subscribe((user: oidcClient.User) => {
-                console.info('OidcAuthService isAuthenticated(): ' + !!this.user);
-    
+                console.info(`OidcAuthService isAuthenticated(): ${!!user}`);
                 if (user) {
                     this.user = user;
                 }
             });
-    
+
             console.log(oidcConfig);
-    
+
             this.authService = new oidcClient.UserManager(oidcConfig);
         }
 
@@ -100,35 +99,30 @@ export class OidcAuthService {
         return this.authService.signinRedirect(args);
     }
 
-    public async handleSigninSilentCallback(): Promise<any> {
-        return this.authService.signinSilentCallback();
+    public async handleSigninSilentCallback(): Promise<oidcClient.User> {
+        console.info('OidcAuthService: handleSigninSilentCallback()');
+        const user = await this.authService.signinRedirectCallback();
+        this.authState$.next(user);
+        return user;
     }
 
-    public async handleRedirectCallback(): Promise<void> {
-
+    public async handleRedirectCallback(): Promise<oidcClient.User> {
         console.info('OidcAuthService: handleRedirectCallback()');
-
         const user = await this.authService.signinRedirectCallback();
-
         this.authState$.next(user);
-
-        this.router.navigate(['/']);
+        return user;
     }
 
     public logout() {
-
         console.info('OidcAuthService: logout()');
-
         this.authState$.next(false);
-
         this.authService.signoutRedirect();
-
     }
 
-    public async renew() {
-        this.user = await this.authService.signinSilent();
-        console.log(`token renew`);
+    public async renew(): Promise<oidcClient.User> {
+        const user = await this.authService.signinSilent();
         this.authState$.next(this.user);
+        return user;
     }
 
 }
