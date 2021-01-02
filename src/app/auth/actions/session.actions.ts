@@ -9,9 +9,11 @@ export const sessionLoadedBefore = createAction('[Auth/API] Session Loaded Befor
 export const loadSessionError = createAction('[Auth/API] Load Session Error');
 export const logoutSession = createAction('[Auth] Logout Session');
 
+export const sessionUpdated = createAction('[Auth] Session Updated', props<{ user: User, tokens: Tokens }>());
+export const sessionRemoved = createAction('[Auth] Session Removed');
 
 export const renewSession = createAction('[Auth] Renew Session');
-export const renewSessionSuccess = createAction('[Auth/API] Renew Session Success', props<{ user: User, tokens: Tokens }>());
+export const renewSessionSuccess = createAction('[Auth/API] Renew Session Success');
 export const renewSessionError = createAction('[Auth/API] Renew Session Error');
-export const callbackEvent = createAction('[Auth] On Callback Event');
-export const silentCallbackEvent = createAction('[Auth] On Silent Callback Event');
+export const handleSignInCallback = createAction('[Auth] Handle SignIn Callback');
+export const handleSilentSignInCallback = createAction('[Auth] Handle Silent Sign In Callback');

@@ -1,9 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../reducers';
 import * as fromAuth from '../auth/reducers/auth.reducer';
 import { SessionActions } from '../auth/actions';
-import { OidcAuthService } from '../auth/services/auth.service';
 
 @Component({
   selector: 'app-key-mgmt',
@@ -20,8 +19,7 @@ export class KeyMgmtComponent implements OnInit {
 
   currentTime = Math.trunc(Date.now() / 1000);
 
-  constructor(private authService: OidcAuthService, private changeDetectorRef: ChangeDetectorRef,
-     private store: Store<fromRoot.State>) {
+  constructor(private store: Store<fromRoot.State>) {
   }
 
   ngOnInit() {
@@ -40,14 +38,6 @@ export class KeyMgmtComponent implements OnInit {
     });
   }
 
-  reloadView() {
-    this.accessTokenString = this.authService.getAccessToken();
-    this.accessToken = this.parseJwt(this.accessTokenString);
-    this.idTokenString = this.authService.getIdToken();
-    this.idToken = this.parseJwt(this.idTokenString);
-    this.changeDetectorRef.detectChanges();
-  }
-
   parseJwt(token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -58,10 +48,7 @@ export class KeyMgmtComponent implements OnInit {
   };
 
   renew() {
-    this.authService.renew().then(user => {
-      this.reloadView();
-    });
-    //this.store.dispatch(SessionActions.renewSession());
+    this.store.dispatch(SessionActions.renewSession());
   }
 }
 

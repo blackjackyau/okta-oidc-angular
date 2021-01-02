@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { SessionActions } from '../auth/actions';
-import { selectCurrentUser } from '../auth/reducers/auth.reducer';
-import { OidcAuthService } from '../auth/services/auth.service';
+import { selectAuthInit } from '../auth/reducers/auth.reducer';
 import * as fromRoot from '../reducers';
 
 @Component({
@@ -15,22 +14,21 @@ export class AuthCallbackComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private authService: OidcAuthService, private store: Store<fromRoot.State>, router: Router) {
+  constructor(private store: Store<fromRoot.State>, router: Router) {
     if (this.inIframe()) {
-      // this.store.dispatch(SessionActions.silentCallbackEvent());
-      this.authService.handleSigninSilentCallback();
+      this.store.dispatch(SessionActions.handleSilentSignInCallback());
     } else {
-      this.subscriptions = this.store.pipe(select(selectCurrentUser)).subscribe((user) => {
-        if (user) {
+      this.subscriptions = this.store.pipe(select(selectAuthInit)).subscribe((init) => {
+        if (init) {
           router.navigate(['/']);
         }
       });
-      this.store.dispatch(SessionActions.callbackEvent());
+      this.store.dispatch(SessionActions.handleSignInCallback());
     }
   }
 
   ngOnDestroy(): void {
-    this.subscriptions?.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
 
   ngOnInit() {

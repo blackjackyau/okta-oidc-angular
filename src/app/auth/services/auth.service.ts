@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject, Subject } from 'rxjs';
 
 import { OidcConfig } from './config';
 import { OidcConfigService } from './config.service';
@@ -16,15 +15,14 @@ import { AuthProfilesService } from '../../auth-profiles/auth-profiles.service';
 })
 export class OidcAuthService {
 
-    private authState$ = new BehaviorSubject(undefined);
+    private userStateSubject: Subject<oidcClient.User> = new ReplaySubject<oidcClient.User>(1);
 
-    private authService: oidcClient.UserManager;
+    private userManager: oidcClient.UserManager;
 
     private user: oidcClient.User;
 
     constructor(@Inject(OidcConfigService) private config: OidcConfig,
-        private authProfilesService: AuthProfilesService,
-        private router: Router) {
+        private authProfilesService: AuthProfilesService) {
 
         console.info('OidcAuthService: constructor()');
 
@@ -46,29 +44,39 @@ export class OidcAuthService {
                 loadUserInfo: effectiveOidcConfig.loadUserInfo
             };
 
-            this.authState$.subscribe((user: oidcClient.User) => {
+            this.userStateSubject.subscribe((user: oidcClient.User) => {
                 console.info(`OidcAuthService isAuthenticated(): ${!!user}`);
                 if (user) {
                     this.user = user;
                 }
             });
 
-            console.log(oidcConfig);
+            this.userManager = new oidcClient.UserManager(oidcConfig);
 
-            this.authService = new oidcClient.UserManager(oidcConfig);
+            this.userManager.events.addUserLoaded(user => {
+                console.log(user);
+                this.userStateSubject.next(user);
+            });
+
+            this.userManager.events.addUserUnloaded(() => {
+                this.userStateSubject.next(undefined);
+            });
         }
+    }
 
+    public userSubject(): Subject<oidcClient.User> {
+        return this.userStateSubject;
     }
 
     public async isAuthenticated(): Promise<boolean> {
         if (this.user) {
             return Promise.resolve(true);
         } else {
-            if (!this.authService) {
+            if (!this.userManager) {
                 return Promise.resolve(false);
             } else {
-                return this.authService.getUser().then(user => {
-                    this.authState$.next(user);
+                return this.userManager.getUser().then(user => {
+                    this.userStateSubject.next(user);
                     return Promise.resolve(!!user);
                 });
             }
@@ -96,32 +104,28 @@ export class OidcAuthService {
                 extraQueryParams: param
             };
         }
-        return this.authService.signinRedirect(args);
+        return this.userManager.signinRedirect(args);
     }
 
     public async handleSigninSilentCallback(): Promise<oidcClient.User> {
         console.info('OidcAuthService: handleSigninSilentCallback()');
-        const user = await this.authService.signinRedirectCallback();
-        this.authState$.next(user);
+        const user = await this.userManager.signinSilentCallback();
         return user;
     }
 
     public async handleRedirectCallback(): Promise<oidcClient.User> {
         console.info('OidcAuthService: handleRedirectCallback()');
-        const user = await this.authService.signinRedirectCallback();
-        this.authState$.next(user);
+        const user = await this.userManager.signinRedirectCallback();
         return user;
     }
 
     public logout() {
         console.info('OidcAuthService: logout()');
-        this.authState$.next(false);
-        this.authService.signoutRedirect();
+        this.userManager.signoutRedirect();
     }
 
     public async renew(): Promise<oidcClient.User> {
-        const user = await this.authService.signinSilent();
-        this.authState$.next(this.user);
+        const user = await this.userManager.signinSilent();
         return user;
     }
 
