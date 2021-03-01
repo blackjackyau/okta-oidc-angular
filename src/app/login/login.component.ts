@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
   federatedLogin(federatedIdp: FederatedIdP) {
     const idpKey = this.activeAuthProfile.fedIdPKey || 'idp';
     const param = {};
-    param[`idpKey`] = federatedIdp.id;
+    param[`${idpKey}`] = federatedIdp.id;
     this.authService.loginWithRedirect(param);
   }
 
