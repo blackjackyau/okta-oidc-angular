@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { User } from '../../auth/models/user';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '../../reducers'
-import { LoadUsers } from './state/user-mgmt.actions';
-import { selectUsers } from './state';
+import { getError, selectUsers, selectUsersStatus } from './reducers/user-mgmt.reducer';
+import { UserMgmtActions } from './actions';
 
 @Component({
   selector: 'app-user-mgmt',
@@ -14,12 +14,16 @@ import { selectUsers } from './state';
 export class UserMgmtComponent implements OnInit {
 
   users$: Observable<User[]>;
+  errorMsg: string;
 
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.store.dispatch(new LoadUsers());
+    this.store.dispatch(UserMgmtActions.LoadUsers());
     this.users$ = this.store.pipe(select(selectUsers));
+    this.store.pipe(select(selectUsersStatus)).subscribe(status => {
+      this.errorMsg = getError(status);
+    });
   }
 
 }

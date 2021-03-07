@@ -4,4 +4,7 @@
     <p matLine> {{ user.firstName }} {{ user.lastName }} </p>
     <p matLine> {{ user.userName }} </p>
   </mat-list-item>
+  <p *ngIf="errorMsg">
+    Error loading users, reason: {{ errorMsg }}
+  </p>
 </mat-nav-list>

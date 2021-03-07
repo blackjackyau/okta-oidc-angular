@@ -53,5 +53,3 @@ Single Page Application type of OIDC flow (Public Client with Auth Code PKCE) wi
 #### Formula
 - S256 = SHA256
 - code_challenge = Base64(code_challenge_method(code_verifier)), where code_verifier is random generated
-
-// 00HBOBLfDw1oT9TdVq-juICGItxJEav7r68oFNZkbL
