@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserMgmtService } from '../user-mgmt.service';
-import { switchMap, map, withLatestFrom, catchError } from 'rxjs/operators';
+import { switchMap, map, withLatestFrom, catchError, flatMap } from 'rxjs/operators';
 import { UserMgmtActions } from '../actions';
 import { Store } from '@ngrx/store';
 import * as fromUserMgmt from '../reducers/user-mgmt.reducer';
@@ -17,8 +17,8 @@ export class UsersEffects {
     this.actions$.pipe(
       ofType(UserMgmtActions.LoadUsers),
       withLatestFrom(this.store.select(fromUserMgmt.selectUsersStatus)),
-      switchMap(([action, status]) => {
-        if (status === fromUserMgmt.ItemStatus.LOADED) {
+      flatMap(([action, status]) => { // flat map is needed to prevent http stream to be cancelled
+        if (status === fromUserMgmt.ItemStatus.LOADED || status === fromUserMgmt.ItemStatus.STILL_LOADING) {
           return of(UserMgmtActions.LoadUsersNoOp());
         } else {
           return this.usersService.getUsers().pipe(

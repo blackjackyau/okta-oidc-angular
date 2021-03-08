@@ -1,4 +1,5 @@
 <mat-nav-list>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
   <mat-list-item *ngFor="let user of users$ | async " (click)="onView(user)">
     <h3 matLine> {{ user.id }} </h3>
     <p matLine> {{ user.firstName }} {{ user.lastName }} </p>

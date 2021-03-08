@@ -9,6 +9,7 @@ import { KeyMgmtComponent } from '../key-mgmt/key-mgmt.component';
 const routes: Routes = [{ path: '', component: AdminsComponent, canActivate: [LoggedInGuard],
 children: [
   { path: 'users', component: UserMgmtComponent },
+  { path: 'users2', component: UserMgmtComponent },
   { path: 'key-mgmt', component: KeyMgmtComponent },
   { path: '', redirectTo: 'users', pathMatch: 'full' },
 ]

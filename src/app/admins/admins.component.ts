@@ -24,6 +24,11 @@ export class AdminsComponent implements OnInit {
       icon: 'person'
     },
     {
+      label: 'Manage Users 2',
+      link: 'users2',
+      icon: 'person'
+    },
+    {
       label: 'Key Management',
       link: 'key-mgmt',
       icon: 'vpn_key'

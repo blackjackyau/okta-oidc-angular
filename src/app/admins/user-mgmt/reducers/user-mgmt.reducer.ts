@@ -28,7 +28,9 @@ const initialState: State = {
 export const reducer = createReducer(
     initialState,
     on(UserMgmtActions.LoadUsers, (state: State) => {
-        if (ItemStatus.LOADED !== state.status) {
+        if (ItemStatus.LOADING === state.status || ItemStatus.STILL_LOADING === state.status) {
+            return { ...state, status: ItemStatus.STILL_LOADING };
+        } else if (ItemStatus.LOADED !== state.status) {
             return { ...state, status: ItemStatus.LOADING };
         } else {
             return { ...state };
@@ -54,6 +56,7 @@ export function getError(status: Status): string | null {
 export const enum ItemStatus {
     INIT = 'INIT',
     LOADING = 'LOADING',
+    STILL_LOADING = 'STILL_LOADING',
     LOADED = 'LOADED',
 }
 export interface ErrorStatus {
