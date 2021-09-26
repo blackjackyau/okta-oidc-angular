@@ -1,6 +1,6 @@
-import { Actions, createEffect, Effect, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
-import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { OidcAuthService } from 'src/app/auth/services/auth.service';
 import { SessionActions } from '../actions';
 import { User } from '../models/user';
@@ -9,6 +9,7 @@ import { from, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers';
 import * as fromAuth from '../reducers/auth.reducer';
+import { parseJwt } from '../services/jwt.util';
 
 @Injectable()
 export class SessionEffects {
@@ -16,48 +17,30 @@ export class SessionEffects {
   constructor(private actions$: Actions, private store: Store<fromRoot.State>,
     private authService: OidcAuthService) { }
 
-  syncSession$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ROOT_EFFECTS_INIT),
-      switchMap(() => {
-        return this.authService.userSubject().pipe(
-          map(authUser => {
-            if (authUser) {
-              const user: User = {
-                id: authUser.profile.id, userName: authUser.profile.preferred_username,
-                firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
-              };
-              const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at }
-              return SessionActions.sessionUpdated({ user, tokens });
-            } else {
-              return SessionActions.sessionRemoved();
-            }
-          })
-        )
-      })
-    )
-  );
-
   loadSession$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionActions.loadSession),
       withLatestFrom(this.store.select(fromAuth.selectAuthInit)),
-      map(([action, init]) => {
+      switchMap(([action, init]) => {
         if (!init) {
-          const authUser = this.authService.getUser();
-          if (authUser) {
-            const ssws = localStorage.getItem('okta-ssws');
-            const user: User = {
-              id: authUser.profile.id, userName: authUser.profile.preferred_username,
-              firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
-            };
-            const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at }
-            return SessionActions.loadSessionSuccess({ user, ssws, tokens });
-          } else {
-            return SessionActions.loadSessionError();
-          }
+          return this.authService.user$().pipe(
+            //take(1),
+            map(authUser => {
+              if (authUser) {
+                const ssws = localStorage.getItem('okta-ssws');
+                const user: User = {
+                  id: authUser.profile.id, userName: authUser.profile.preferred_username,
+                  firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
+                };
+                const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at };
+                return SessionActions.loadSessionSuccess({ user, ssws, tokens });
+              } else {
+                return SessionActions.loadSessionError();
+              }
+            })
+          )
         } else {
-          return SessionActions.sessionLoadedBefore();
+          return of(SessionActions.sessionLoadedBefore());
         }
       })
     )
@@ -66,11 +49,15 @@ export class SessionEffects {
   logoutSession$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SessionActions.logoutSession),
+      switchMap(() => {
+        return this.authService.logout();
+      }),
       map(() => {
+        // alert(window.location.href); for debugging
         localStorage.removeItem('okta-ssws');
-        this.authService.logout();
+        return SessionActions.logoutSessionSuccess();
       })
-    ), { dispatch: false }
+    )
   );
 
   // do not handle session update as it will be handled by sync session effect
@@ -79,8 +66,13 @@ export class SessionEffects {
       ofType(SessionActions.renewSession),
       switchMap(() => {
         return from(this.authService.renew()).pipe(
-          map(_ => {
-            return SessionActions.renewSessionSuccess();
+          map(authUser => {
+            const user: User = {
+              id: authUser.profile.id, userName: authUser.profile.preferred_username,
+              firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
+            };
+            const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at };
+            return SessionActions.renewSessionSuccess({ user, tokens });
           }),
           catchError(err => {
             console.error(err);

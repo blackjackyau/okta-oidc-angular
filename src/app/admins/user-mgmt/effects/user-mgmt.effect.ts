@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserMgmtService } from '../user-mgmt.service';
-import { switchMap, map, withLatestFrom, catchError, flatMap } from 'rxjs/operators';
+import { map, withLatestFrom, catchError, flatMap } from 'rxjs/operators';
 import { UserMgmtActions } from '../actions';
 import { Store } from '@ngrx/store';
 import * as fromUserMgmt from '../reducers/user-mgmt.reducer';

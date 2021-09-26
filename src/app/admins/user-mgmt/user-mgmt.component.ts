@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { User } from '../../auth/models/user';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from '../../reducers'
-import { getError, ItemStatus, selectUsers, selectUsersStatus } from './reducers/user-mgmt.reducer';
+import { getError, ItemStatus, selectUserMgmtState } from './reducers/user-mgmt.reducer';
 import { UserMgmtActions } from './actions';
 
 @Component({
@@ -16,18 +16,27 @@ export class UserMgmtComponent implements OnInit {
   users$: Observable<User[]>;
   errorMsg: string;
   loading: boolean;
+  users: User[];
 
   constructor(private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
     this.store.dispatch(UserMgmtActions.LoadUsers());
-    this.users$ = this.store.pipe(select(selectUsers));
-    this.store.pipe(select(selectUsersStatus)).subscribe(status => {
-      if (status === ItemStatus.LOADING || status === ItemStatus.STILL_LOADING) {
-        this.loading = true;
-      } else {
-        this.loading = false;
-        this.errorMsg = getError(status);
+    this.store.pipe(select(selectUserMgmtState)).subscribe(itemState => {
+      const status = itemState.status;
+      switch(status) {
+        case ItemStatus.LOADING:
+        case ItemStatus.STILL_LOADING:
+          this.loading = true;
+          break;
+        case ItemStatus.LOADED:
+          this.loading = false;
+          this.users = itemState.users;
+          break;
+        default:
+          this.loading = false;
+          this.errorMsg = getError(status);
+          break;
       }
     });
   }

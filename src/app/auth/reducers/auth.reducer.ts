@@ -21,11 +21,16 @@ export const initialState: State = {
 
 export const reducer = createReducer(
     initialState,
-    on(SessionActions.loadSessionSuccess, (state, { user, ssws, tokens }) => ({ init: true, user, ssws, tokens })),
-    on(SessionActions.sessionUpdated, (state, { user, tokens }) => ({ ...state, user, tokens })),
+    on(SessionActions.loadSessionSuccess,
+        (_, { user, ssws, tokens }) => {
+            return { init: true, user, ssws, tokens }
+        }),
+    on(SessionActions.renewSessionSuccess,
+        (state, { user, tokens }) => {
+            return { ...state, user, tokens }
+        }),
     on(SessionActions.loadSessionError, () => initialState),
-    on(SessionActions.logoutSession, () => initialState),
-    on(SessionActions.sessionRemoved, () => initialState),
+    on(SessionActions.logoutSessionSuccess, () => initialState),
 );
 
 const selectAuthState = createFeatureSelector<State>(
