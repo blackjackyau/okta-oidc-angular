@@ -15,14 +15,16 @@ export class UsersEffects {
 
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(UserMgmtActions.LoadUsers),
+      ofType(UserMgmtActions.LoadUsersParam('client'), UserMgmtActions.LoadUsersParam('internal')),
       withLatestFrom(this.store.select(fromUserMgmt.selectUsersStatus)),
       flatMap(([action, status]) => { // flat map is needed to prevent http stream to be cancelled
+        const realm = action.type.split(":")[0];
+        console.log(`${realm} effect`);
         if (status === fromUserMgmt.ItemStatus.LOADED || status === fromUserMgmt.ItemStatus.STILL_LOADING) {
           return of(UserMgmtActions.LoadUsersNoOp());
         } else {
           return this.usersService.getUsers().pipe(
-            map(users => UserMgmtActions.LoadUsersSuccess({ users })),
+            map(users => UserMgmtActions.LoadUsersSuccessParam(realm)({ users })),
             catchError(err => {
               console.error(err);
               return of(UserMgmtActions.LoadUsersError({ errorMsg: err.statusText }));

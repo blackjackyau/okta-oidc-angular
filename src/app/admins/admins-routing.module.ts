@@ -8,8 +8,8 @@ import { KeyMgmtComponent } from '../key-mgmt/key-mgmt.component';
 
 const routes: Routes = [{ path: '', component: AdminsComponent, canActivate: [LoggedInGuard],
 children: [
-  { path: 'users', component: UserMgmtComponent },
-  { path: 'users2', component: UserMgmtComponent },
+  { path: 'users', component: UserMgmtComponent, data: { realm: 'client' } },
+  { path: 'users2', component: UserMgmtComponent, data: { realm: 'client2' } },
   { path: 'key-mgmt', component: KeyMgmtComponent },
   { path: '', redirectTo: 'users', pathMatch: 'full' },
 ]

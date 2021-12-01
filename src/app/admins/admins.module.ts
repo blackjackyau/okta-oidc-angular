@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AdminsRoutingModule } from './admins-routing.module';
 import { AdminsComponent } from './admins.component';
-import { reducer } from './user-mgmt/reducers/user-mgmt.reducer';
+import { reducer, reducerWithParam } from './user-mgmt/reducers/user-mgmt.reducer';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { UsersEffects } from './user-mgmt/effects/user-mgmt.effect';
@@ -19,7 +19,8 @@ import { AppSharedModule } from '../app-shared.module';
     AdminsRoutingModule,
     AppMaterialModule,
     AppSharedModule,
-    StoreModule.forFeature('userMgmt', reducer),
+    StoreModule.forFeature('userMgmt', reducerWithParam('client')),
+    StoreModule.forFeature('userMgmt2', reducerWithParam('client2')),
     EffectsModule.forFeature([UsersEffects])
   ]
 })
