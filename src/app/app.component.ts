@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Log } from 'oidc-client'
+import { Log } from 'oidc-client-ts'
 
 @Component({
   selector: 'app-root',
@@ -10,8 +10,7 @@ export class AppComponent implements OnInit {
   title = 'okta-oidc-angular-rxjs';
 
   ngOnInit() {
-    Log.logger = console;
-    Log.level = Log.DEBUG;
+    Log.setLevel(Log.DEBUG);
   }
 
 }

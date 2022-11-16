@@ -7,7 +7,7 @@ import { OidcConfigService } from './config.service';
 
 // http://www.typescriptlang.org/docs/handbook/namespaces-and-modules.html#introduction
 // import { UserManager, UserManagerSettings, User } from 'oidc-client';
-import * as oidcClient from 'oidc-client';
+import { UserManager, User, UserManagerSettings } from 'oidc-client-ts';
 import { AuthProfilesService } from '../../auth-profiles/auth-profiles.service';
 import { map, tap } from 'rxjs/operators';
 
@@ -16,9 +16,9 @@ import { map, tap } from 'rxjs/operators';
 })
 export class OidcAuthService {
 
-  private userManager: oidcClient.UserManager;
+  private userManager: UserManager;
 
-  private user: oidcClient.User;
+  private user: User;
 
   constructor(@Inject(OidcConfigService) private config: OidcConfig,
     private authProfilesService: AuthProfilesService) {
@@ -30,7 +30,7 @@ export class OidcAuthService {
     if (authProfile) {
       const effectiveOidcConfig = Object.assign({}, this.config, authProfile.oidc);
 
-      const oidcConfig: oidcClient.UserManagerSettings = {
+      const oidcConfig: UserManagerSettings = {
         authority: effectiveOidcConfig.issuer,
         client_id: effectiveOidcConfig.clientId,
         redirect_uri: effectiveOidcConfig.redirectUri,
@@ -43,7 +43,7 @@ export class OidcAuthService {
         loadUserInfo: effectiveOidcConfig.loadUserInfo
       };
 
-      this.userManager = new oidcClient.UserManager(oidcConfig);
+      this.userManager = new UserManager(oidcConfig);
 
       this.userManager.events.addUserLoaded(user => {
         this.user = user;
@@ -56,7 +56,7 @@ export class OidcAuthService {
     }
   }
 
-  public user$(): Observable<oidcClient.User> {
+  public user$(): Observable<User> {
     if (this.user) {
       return of(this.user);
     } else {
@@ -90,13 +90,12 @@ export class OidcAuthService {
     return this.userManager.signinRedirect(args);
   }
 
-  public async handleSigninSilentCallback(): Promise<oidcClient.User> {
+  public async handleSigninSilentCallback(): Promise<void> {
     console.info('OidcAuthService: handleSigninSilentCallback()');
-    const user = await this.userManager.signinSilentCallback();
-    return user;
+    return await this.userManager.signinSilentCallback();
   }
 
-  public async handleRedirectCallback(): Promise<oidcClient.User> {
+  public async handleRedirectCallback(): Promise<User> {
     console.info('OidcAuthService: handleRedirectCallback()');
     const user = await this.userManager.signinRedirectCallback();
     return user;
@@ -106,7 +105,7 @@ export class OidcAuthService {
     return this.userManager.signoutRedirect();
   }
 
-  public async renew(): Promise<oidcClient.User> {
+  public async renew(): Promise<User> {
     return await this.userManager.signinSilent();
   }
 }

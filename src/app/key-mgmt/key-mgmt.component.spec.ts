@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { KeyMgmtComponent } from './key-mgmt.component';
 
@@ -6,7 +6,7 @@ describe('KeyMgmtComponent', () => {
   let component: KeyMgmtComponent;
   let fixture: ComponentFixture<KeyMgmtComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ KeyMgmtComponent ]
     })

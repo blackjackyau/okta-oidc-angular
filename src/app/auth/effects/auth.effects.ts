@@ -9,7 +9,6 @@ import { from, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers';
 import * as fromAuth from '../reducers/auth.reducer';
-import { parseJwt } from '../services/jwt.util';
 
 @Injectable()
 export class SessionEffects {
@@ -29,7 +28,7 @@ export class SessionEffects {
               if (authUser) {
                 const ssws = localStorage.getItem('okta-ssws');
                 const user: User = {
-                  id: authUser.profile.id, userName: authUser.profile.preferred_username,
+                  id: authUser.profile.sub, userName: authUser.profile.preferred_username,
                   firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
                 };
                 const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at };
@@ -68,7 +67,7 @@ export class SessionEffects {
         return from(this.authService.renew()).pipe(
           map(authUser => {
             const user: User = {
-              id: authUser.profile.id, userName: authUser.profile.preferred_username,
+              id: authUser.profile.sub, userName: authUser.profile.preferred_username,
               firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
             };
             const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at };
@@ -91,7 +90,7 @@ export class SessionEffects {
           map(authUser => {
             const ssws = localStorage.getItem('okta-ssws');
             const user: User = {
-              id: authUser.profile.id, userName: authUser.profile.preferred_username,
+              id: authUser.profile.sub, userName: authUser.profile.preferred_username,
               firstName: authUser.profile.family_name, lastName: authUser.profile.given_name
             };
             const tokens: Tokens = { idToken: authUser.id_token, accessToken: authUser.access_token, expired_at: authUser.expires_at };

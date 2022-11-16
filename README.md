@@ -1,7 +1,7 @@
 [![Actions Status](https://github.com/blackjackyau/okta-oidc-angular/workflows/Node%20CI/badge.svg)](https://github.com/blackjackyau/okta-oidc-angular/actions)
 
 # OktaOidcAngular
-Single Page Application type of OIDC flow (Public Client with Auth Code PKCE) with OKTA as IdP, uses [oidc-client.js](https://github.com/IdentityModel/oidc-client-js)
+Single Page Application type of OIDC flow (Public Client with Auth Code PKCE) with OKTA as IdP, uses [oidc-client-ts](https://github.com/authTS/oidc-client-ts)
 
 ## Hosted environment
 - git repo [(link)](https://github.com/blackjackyau/okta-oidc-angular-page)
